@@ -18,7 +18,7 @@ Full SaaS application built from the design documents (UI/UX, DB/API, Color Pale
    ```
 
 3. **Environment**
-   - Create `.env` in the project root with: `DATABASE_URL=file:./dev.db` (Prisma uses this).
+   - Create `.env` with **PostgreSQL** URL, e.g. `DATABASE_URL=postgresql://user:password@localhost:5432/invoiceflow` (or use [Neon](https://neon.tech) / [Supabase](https://supabase.com) free tier for a hosted URL).
    - Create `.env.local` with:
      - `OPENAI_API_KEY=<your key>` (copy the value from `openai_APIkey.txt`; never commit this file or the key).
      - Optional: `JWT_SECRET=<random 32+ char string>`.

@@ -30,12 +30,13 @@ Click **Environment Variables** and add (at least for a working app):
 | `JWT_SECRET`     | Long random string (32+) | For session signing            |
 | `OPENAI_API_KEY`| Your OpenAI key          | Only if you use AI features   |
 
-**Database:** The app uses SQLite locally. On Vercel you need a hosted DB:
+**Database (required for signup/login):** The app uses **PostgreSQL**. You must set `DATABASE_URL` to a Postgres connection string:
 
-- **Vercel Postgres:** In the same project, go to **Storage** → **Create Database** → Postgres, then connect it to this project (Vercel will add the URL). You’ll need to change the app to use PostgreSQL (update `prisma/schema.prisma` and use a Postgres connection string).
-- **Or** use a free Postgres (e.g. [Neon](https://neon.tech) or [Supabase](https://supabase.com)), set `DATABASE_URL` to that connection string, and switch Prisma to `provider = "postgresql"` for production.
+- **Vercel Postgres:** In the project, go to **Storage** → **Create Database** → Postgres, then connect it to this project. Vercel will add `POSTGRES_URL` or similar — use that as `DATABASE_URL`.
+- **Neon (free):** [neon.tech](https://neon.tech) → Create project → copy the connection string → set as `DATABASE_URL`.
+- **Supabase (free):** [supabase.com](https://supabase.com) → New project → Settings → Database → Connection string (URI) → set as `DATABASE_URL`.
 
-For a **quick deploy without a real DB** you can leave `DATABASE_URL` unset and add it later (the app may build but fail at runtime until the DB is set).
+The first deploy will run `prisma db push` during build to create tables. **Signup and login will work only after `DATABASE_URL` and `JWT_SECRET` are set.**
 
 ### 4. Deploy
 

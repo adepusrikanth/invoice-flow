@@ -17,7 +17,10 @@ export async function POST(req: Request) {
     await createSession(user.id, user.email, user.name);
     return NextResponse.json({ ok: true, user: { id: user.id, email: user.email, name: user.name } });
   } catch (e) {
-    if (e instanceof z.ZodError) return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
-    return NextResponse.json({ error: 'Registration failed' }, { status: 500 });
+    if (e instanceof z.ZodError) return NextResponse.json({ error: 'Invalid input. Email and password (min 8 characters) required.' }, { status: 400 });
+    if ((e as { code?: string })?.code === 'P1001' || (e instanceof Error && e.message?.includes('Prisma')))
+      return NextResponse.json({ error: 'Database unavailable. Please try again later.' }, { status: 503 });
+    console.error('Register error:', e);
+    return NextResponse.json({ error: 'Registration failed. Please try again.' }, { status: 500 });
   }
 }
