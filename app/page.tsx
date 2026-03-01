@@ -41,23 +41,62 @@ export default async function LandingPage() {
           ))}
         </div>
       </section>
-      <section className="max-w-6xl mx-auto px-4 py-20">
+      <section id="pricing" className="max-w-6xl mx-auto px-4 py-20">
         <h2 className="text-2xl font-bold text-neutral-900 text-center mb-10">Simple pricing</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {[
             { name: 'Free', price: '$0', desc: '5 invoices/month' },
-            { name: 'Starter', price: '$9', desc: '100 invoices' },
-            { name: 'Pro', price: '$29', desc: 'Unlimited', popular: true },
+            { name: 'Starter', price: '$9', desc: '100 invoices/mo' },
+            { name: 'Popular', price: '$29', desc: 'Unlimited', popular: true },
             { name: 'Business', price: '$79', desc: 'Team + API' },
           ].map((tier, i) => (
             <div key={tier.name} className={`rounded-xl bg-white border p-6 shadow-sm hover:shadow-lg transition-all duration-300 opacity-0 animate-fade-in-up ${tier.popular ? 'border-brand-primary ring-2 ring-brand-primary/20 scale-105' : 'border-neutral-200'}`} style={{ animationDelay: `${i * 80}ms` }}>
-              {tier.popular && <span className="text-xs font-medium text-brand-primary">Popular</span>}
+              {tier.popular && <span className="text-xs font-medium text-brand-primary">Most popular</span>}
               <h3 className="font-semibold text-neutral-900 mt-2">{tier.name}</h3>
               <p className="text-2xl font-bold text-neutral-900 mt-2">{tier.price}<span className="text-sm font-normal text-neutral-500">/mo</span></p>
               <p className="text-sm text-neutral-500 mt-2">{tier.desc}</p>
               <Link href="/register" className="mt-4 block w-full py-2.5 rounded-button text-center text-sm font-medium bg-brand-primary text-white hover:bg-brand-primary/90 transition">Get started</Link>
             </div>
           ))}
+        </div>
+        <div className="rounded-xl bg-white border border-neutral-200 overflow-hidden shadow-sm opacity-0 animate-fade-in">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-neutral-200 bg-neutral-50">
+                  <th className="text-left p-4 font-medium text-neutral-700">Feature</th>
+                  <th className="p-4 font-medium text-neutral-700 text-center">Free</th>
+                  <th className="p-4 font-medium text-neutral-700 text-center">Starter</th>
+                  <th className="p-4 font-medium text-neutral-700 text-center bg-brand-primary/5">Popular</th>
+                  <th className="p-4 font-medium text-neutral-700 text-center">Business</th>
+                </tr>
+              </thead>
+              <tbody className="text-neutral-600">
+                {[
+                  { feature: 'Invoices per month', free: '5', starter: '100', popular: 'Unlimited', business: 'Unlimited' },
+                  { feature: 'Clients', free: true, starter: true, popular: true, business: true },
+                  { feature: 'AI invoice generation', free: false, starter: true, popular: true, business: true },
+                  { feature: 'Multi-currency', free: true, starter: true, popular: true, business: true },
+                  { feature: 'Tax & GST reports', free: false, starter: true, popular: true, business: true },
+                  { feature: 'Client portal', free: false, starter: true, popular: true, business: true },
+                  { feature: 'Expense tracking', free: false, starter: true, popular: true, business: true },
+                  { feature: 'PDF export', free: true, starter: true, popular: true, business: true },
+                  { feature: 'Email reminders', free: false, starter: true, popular: true, business: true },
+                  { feature: 'Priority support', free: false, starter: false, popular: true, business: true },
+                  { feature: 'API access', free: false, starter: false, popular: false, business: true },
+                  { feature: 'Team members', free: false, starter: false, popular: false, business: true },
+                ].map((row, i) => (
+                  <tr key={row.feature} className="border-b border-neutral-100 hover:bg-neutral-50/50">
+                    <td className="p-4 font-medium text-neutral-900">{row.feature}</td>
+                    <td className="p-4 text-center">{typeof row.free === 'string' ? row.free : row.free ? <span className="text-success-dark">✓</span> : <span className="text-neutral-400">✗</span>}</td>
+                    <td className="p-4 text-center">{typeof row.starter === 'string' ? row.starter : row.starter ? <span className="text-success-dark">✓</span> : <span className="text-neutral-400">✗</span>}</td>
+                    <td className="p-4 text-center bg-brand-primary/5">{typeof row.popular === 'string' ? row.popular : row.popular ? <span className="text-success-dark">✓</span> : <span className="text-neutral-400">✗</span>}</td>
+                    <td className="p-4 text-center">{typeof row.business === 'string' ? row.business : row.business ? <span className="text-success-dark">✓</span> : <span className="text-neutral-400">✗</span>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
       <footer className="border-t border-neutral-200 mt-20 py-12 bg-neutral-50/50">
