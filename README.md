@@ -40,10 +40,21 @@ Full SaaS application built from the design documents (UI/UX, DB/API, Color Pale
 
    From there you can register, sign in, paste invoice text or upload `.txt`/`.json` files, and view extracted invoices. AI extraction runs only on the server using `OPENAI_API_KEY`.
 
-## Push to GitHub later
+## Deploy to GitHub and Vercel
+
+1. **Create a repo** on GitHub named `invoice-flow` (or "invoice flow"): https://github.com/new  
+2. **Push this code** (replace `YOUR_USERNAME` with your GitHub username):
+   ```bash
+   git remote add origin https://github.com/YOUR_USERNAME/invoice-flow.git
+   git branch -M main
+   git push -u origin main
+   ```
+3. **Deploy on Vercel:** Go to [vercel.com](https://vercel.com) → **Add New → Project** → Import your `invoice-flow` repo → add env vars (`DATABASE_URL`, `JWT_SECRET`, `OPENAI_API_KEY`) → Deploy.
+
+See **[DEPLOY.md](./DEPLOY.md)** for step-by-step instructions and database notes for Vercel.
 
 - Ensure `.env.local`, `openai_APIkey.txt`, and any secret files are not committed (they are in `.gitignore`).
-- Set `OPENAI_API_KEY` and `JWT_SECRET` in your deployment environment (e.g. GitHub Actions secrets or host env vars); never put them in the repo.
+- Set `OPENAI_API_KEY` and `JWT_SECRET` in your deployment environment (e.g. Vercel env vars); never put them in the repo.
 
 ## Scripts
 
