@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --color-primary: #6367FF;
+  --color-secondary: #8494FF;
+  --color-tertiary: #C9BEFF;
+  --color-accent: #FFDBFD;
+  --color-neutral-900: #0F0F1A;
+  --color-neutral-800: #1A1A2E;
+  --color-neutral-700: #2D2D44;
+  --color-neutral-600: #44445E;
+  --color-neutral-500: #6B6B85;
+  --color-neutral-400: #9494AB;
+  --color-neutral-300: #BFBFD1;
+  --color-neutral-200: #DDDDE8;
+  --color-neutral-100: #EFEFF4;
+  --color-neutral-50: #F8F8FC;
+  --color-success: #10B981;
+  --color-success-bg: #ECFDF5;
+  --color-error: #EF4444;
+  --color-error-bg: #FEF2F2;
+  --color-warning: #F59E0B;
+  --color-warning-bg: #FFFBEB;
+  --color-info: #3B82F6;
+  --color-info-bg: #EFF6FF;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-feature-settings: "rlig" 1, "calt" 1;
+  background-color: var(--color-neutral-50);
+  color: var(--color-neutral-900);
+}
+
+/* Ensure form inputs have visible text on light backgrounds */
+input:not([type="submit"]):not([type="button"]),
+textarea,
+select {
+  color: var(--color-neutral-900);
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-neutral-500);
+}
+
+/* Accessibility: visible focus for keyboard users (WCAG 2.1) */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@media print {
+  .print\:hidden { display: none !important; }
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Landing page animations */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }

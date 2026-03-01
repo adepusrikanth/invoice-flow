@@ -1,0 +1,1456 @@
+
+
+
+
+
+
+
+
+
+
+BRAND COLOR PALETTE
+
+
+
+InvoiceFlow
+
+Design System & Color Guide
+
+
+
+
+
+Primary
+
+#6367FF
+
+
+
+Secondary
+
+#8494FF
+
+
+
+Tertiary
+
+#C9BEFF
+
+
+
+Accent
+
+#FFDBFD
+
+
+
+AI-Powered Invoice & Billing Platform
+
+Version 1.0  •  February 2026
+
+
+
+1. Brand Colors — Core Palette
+
+These four colors define the InvoiceFlow brand identity. Every UI element, marketing asset, and communication should use these as the foundation. The palette moves from bold confidence (Primary) through trust (Secondary) to softness (Tertiary & Accent), creating a modern, approachable fintech aesthetic.
+
+
+
+
+
+PRIMARY
+
+Electric Indigo
+
+#6367FF
+
+
+
+SECONDARY
+
+Soft Periwinkle
+
+#8494FF
+
+
+
+TERTIARY
+
+Lavender Mist
+
+#C9BEFF
+
+
+
+ACCENT
+
+Rose Bloom
+
+#FFDBFD
+
+
+
+Color
+
+HEX
+
+RGB
+
+HSL
+
+Usage Guidelines
+
+Primary
+
+#6367FF
+
+99, 103, 255
+
+238°, 100%, 69%
+
+CTA buttons, active nav, links, primary headings, logo, key interactive elements. Use at 60% of brand color presence.
+
+Secondary
+
+#8494FF
+
+132, 148, 255
+
+232°, 100%, 76%
+
+Hover states, secondary buttons, chart fills, tab underlines, selected items. Use at 25% of brand color presence.
+
+Tertiary
+
+#C9BEFF
+
+201, 190, 255
+
+250°, 100%, 87%
+
+Light backgrounds, card highlights, tag fills, notification badges, tooltips. Use at 10% of brand color presence.
+
+Accent
+
+#FFDBFD
+
+255, 219, 253
+
+303°, 100%, 93%
+
+Special highlights, AI feature badges, promo banners, celebration states, onboarding. Use at 5% of brand color presence.
+
+
+
+
+
+2. Extended Shades & Tints
+
+Each brand color is expanded into a full shade scale for flexible UI use. Darker shades for text on light backgrounds, lighter tints for backgrounds and hover states.
+
+
+
+2.1 Primary Scale — Electric Indigo
+
+900
+
+#1E2078
+
+700
+
+#3538B2
+
+600
+
+#4A4ED9
+
+500 ★
+
+#6367FF
+
+400
+
+#8494FF
+
+200
+
+#C9BEFF
+
+50
+
+#EEEEFF
+
+
+
+2.2 Secondary Scale — Soft Periwinkle
+
+900
+
+#2A3580
+
+700
+
+#4A5CB3
+
+600
+
+#6978D9
+
+500 ★
+
+#8494FF
+
+400
+
+#A3B0FF
+
+200
+
+#CDD4FF
+
+50
+
+#EEF1FF
+
+
+
+2.3 Tertiary Scale — Lavender Mist
+
+900
+
+#3D3580
+
+700
+
+#6A5EB3
+
+600
+
+#9A8ED9
+
+500 ★
+
+#C9BEFF
+
+400
+
+#D9D1FF
+
+200
+
+#E4DEFF
+
+50
+
+#F5F3FF
+
+
+
+2.4 Accent Scale — Rose Bloom
+
+900
+
+#803D7E
+
+700
+
+#B365B1
+
+600
+
+#D98ED7
+
+500 ★
+
+#FFDBFD
+
+400
+
+#FFE8FE
+
+200
+
+#FFEDFE
+
+50
+
+#FFF5FF
+
+
+
+
+
+3. Neutral Palette
+
+Neutrals carry a subtle cool-purple tint to stay harmonious with the brand colors. Never use pure gray (#888888) — always use these tinted neutrals.
+
+
+
+900
+
+#0F0F1A
+
+800
+
+#1A1A2E
+
+700
+
+#2D2D44
+
+600
+
+#44445E
+
+500
+
+#6B6B85
+
+400
+
+#9494AB
+
+300
+
+#BFBFD1
+
+200
+
+#DDDDE8
+
+100
+
+#EFEFF4
+
+50
+
+#F8F8FC
+
+White
+
+#FFFFFF
+
+
+
+Token
+
+Hex
+
+Usage
+
+Neutral 900
+
+#0F0F1A
+
+Primary headings, critical text, modal overlays (at 80% opacity)
+
+Neutral 800
+
+#1A1A2E
+
+Sidebar background, dark UI surfaces, footer
+
+Neutral 700
+
+#2D2D44
+
+Secondary headings, icon default color, active text
+
+Neutral 600
+
+#44445E
+
+Body text, paragraph content, form labels
+
+Neutral 500
+
+#6B6B85
+
+Placeholder text, disabled text, timestamps, metadata
+
+Neutral 400
+
+#9494AB
+
+Subtle text, helper text, breadcrumbs, inactive icons
+
+Neutral 300
+
+#BFBFD1
+
+Borders, dividers, disabled button borders
+
+Neutral 200
+
+#DDDDE8
+
+Input borders, table borders, card dividers
+
+Neutral 100
+
+#EFEFF4
+
+Table striping, subtle backgrounds, hover on white
+
+Neutral 50
+
+#F8F8FC
+
+Page background, card backgrounds, sidebar hover
+
+White
+
+#FFFFFF
+
+Card surfaces, modal backgrounds, input backgrounds
+
+
+
+
+
+4. Semantic Colors
+
+Semantic colors communicate meaning and status. Each semantic color has three variants: a base for text/icons, a dark for emphasis, and a background tint.
+
+
+
+4.1 Success — Green
+
+Dark
+#059669
+
+#059669
+
+Base
+#10B981
+
+#10B981
+
+Background
+#ECFDF5
+
+#ECFDF5
+
+Use: Paid status, success toasts, positive metrics (+12% ↑), confirmation states, completed actions.
+
+4.2 Error — Red
+
+Dark
+#DC2626
+
+#DC2626
+
+Base
+#EF4444
+
+#EF4444
+
+Background
+#FEF2F2
+
+#FEF2F2
+
+Use: Overdue invoices, error toasts, validation errors, delete confirmations, declined payments.
+
+4.3 Warning — Amber
+
+Dark
+#D97706
+
+#D97706
+
+Base
+#F59E0B
+
+#F59E0B
+
+Background
+#FFFBEB
+
+#FFFBEB
+
+Use: Pending status, warning alerts, approaching due dates, plan limits nearing capacity.
+
+4.4 Info — Blue
+
+Dark
+#2563EB
+
+#2563EB
+
+Base
+#3B82F6
+
+#3B82F6
+
+Background
+#EFF6FF
+
+#EFF6FF
+
+Use: Informational banners, sent invoice status, help tooltips, new feature badges, onboarding tips.
+
+
+
+4.5 Invoice Status Color Mapping
+
+Status
+
+Text Color
+
+Badge BG
+
+Sample
+
+Context
+
+Draft
+
+6B6B85
+
+EFEFF4
+
+DRAFT
+
+Invoice saved but not sent yet
+
+Sent
+
+2563EB
+
+EFF6FF
+
+SENT
+
+Invoice emailed/shared to client
+
+Viewed
+
+6367FF
+
+E4DEFF
+
+VIEWED
+
+Client has opened the invoice
+
+Pending
+
+D97706
+
+FFFBEB
+
+PENDING
+
+Payment initiated but not confirmed
+
+Paid
+
+059669
+
+ECFDF5
+
+PAID
+
+Full payment received
+
+Overdue
+
+DC2626
+
+FEF2F2
+
+OVERDUE
+
+Past due date, unpaid
+
+Cancelled
+
+9494AB
+
+EFEFF4
+
+CANCELLED
+
+Invoice voided or cancelled
+
+
+
+
+
+5. UI Application Guide
+
+How to apply the color palette to actual InvoiceFlow UI components. This section provides specific color assignments for every element category.
+
+5.1 Buttons
+
+Button Type
+
+Default BG
+
+Hover BG
+
+Text
+
+Usage
+
+Primary CTA
+
+#6367FF
+
+#4A4ED9
+
+#FFFFFF
+
+Create Invoice, Send, Pay Now, Sign Up
+
+Secondary
+
+#EEEEFF
+
+#C9BEFF
+
+#6367FF
+
+Save Draft, Cancel, View Details
+
+Ghost
+
+Transparent
+
+#F8F8FC
+
+#6367FF
+
+Inline actions: Edit, Duplicate, Download
+
+Danger
+
+#EF4444
+
+#DC2626
+
+#FFFFFF
+
+Delete, Remove, Cancel subscription
+
+Success
+
+#10B981
+
+#059669
+
+#FFFFFF
+
+Mark as Paid, Confirm, Approve
+
+Disabled
+
+#EFEFF4
+
+—
+
+#9494AB
+
+Any button in disabled state
+
+
+
+5.2 Navigation & Layout
+
+Element
+
+Color
+
+Hex
+
+Notes
+
+Sidebar background
+
+Neutral 800
+
+#1A1A2E
+
+Dark sidebar with light text and icons
+
+Sidebar active item
+
+Primary
+
+#6367FF
+
+Active nav item gets primary bg at 15% opacity + left accent border
+
+Sidebar hover
+
+Neutral 700
+
+#2D2D44
+
+Subtle lighter bg on hover
+
+Sidebar text
+
+Neutral 300
+
+#BFBFD1
+
+Light gray text, bright white when active
+
+Sidebar icon (default)
+
+Neutral 400
+
+#9494AB
+
+Icons are muted, bright on hover/active
+
+Top header background
+
+White
+
+#FFFFFF
+
+Clean white header with bottom border
+
+Top header border
+
+Neutral 200
+
+#DDDDE8
+
+1px bottom border separating header from content
+
+Page background
+
+Neutral 50
+
+#F8F8FC
+
+Subtle off-white with purple tint
+
+Card background
+
+White
+
+#FFFFFF
+
+All cards, modals, dropdowns use pure white
+
+Card border
+
+Neutral 200
+
+#DDDDE8
+
+1px borders on all cards
+
+Card hover shadow
+
+Primary 15%
+
+#6367FF26
+
+Cards get a faint primary-tinted shadow on hover
+
+Divider / Separator
+
+Neutral 200
+
+#DDDDE8
+
+Horizontal rules, table dividers
+
+
+
+5.3 Forms & Inputs
+
+State
+
+Border
+
+Indicator
+
+Details
+
+Default input
+
+#DDDDE8
+
+—
+
+1px border, white bg, Neutral 600 text, Neutral 400 placeholder
+
+Focused input
+
+#6367FF
+
+Ring glow
+
+Border turns Primary, 3px primary ring at 20% opacity
+
+Error state
+
+#EF4444
+
+Error text
+
+Border turns red, helper text below in red, error icon
+
+Success / Valid
+
+#10B981
+
+Check icon
+
+Border turns green, green check icon appears
+
+Disabled input
+
+#EFEFF4 bg
+
+—
+
+Light gray bg, Neutral 400 text, no border focus
+
+Dropdown open
+
+#6367FF border
+
+Shadow
+
+Primary border, shadow-lg, options have hover in Neutral 50
+
+Checkbox checked
+
+#6367FF fill
+
+White check
+
+Primary bg with white checkmark icon
+
+Toggle on
+
+#6367FF track
+
+White dot
+
+Primary bg track, white circular indicator
+
+Toggle off
+
+#BFBFD1 track
+
+White dot
+
+Neutral 300 track, shifts left
+
+
+
+5.4 Charts & Data Visualization
+
+Chart colors use the brand palette first, then expand to semantic colors for additional data series. Never use more than 6 colors in a single chart.
+
+Order
+
+Color Name
+
+Hex
+
+Usage
+
+1st
+
+Primary
+
+#6367FF
+
+Primary data series, revenue, main metric
+
+2nd
+
+Secondary
+
+#8494FF
+
+Secondary series, comparison data
+
+3rd
+
+Tertiary
+
+#C9BEFF
+
+Third series, background fill areas
+
+4th
+
+Accent
+
+#FFDBFD
+
+Fourth series, highlight data points
+
+5th
+
+Success Green
+
+#10B981
+
+Positive metrics, paid amounts
+
+6th
+
+Amber
+
+#F59E0B
+
+Warning data, pending amounts
+
+
+
+5.5 AI Chat & Special Elements
+
+Element
+
+Color
+
+Hex
+
+Notes
+
+AI Chat bubble (assistant)
+
+Tertiary bg
+
+#C9BEFF20
+
+10% Tertiary bg with Tertiary left border accent
+
+AI Chat bubble (user)
+
+Primary
+
+#6367FF
+
+Primary bg, white text, right-aligned
+
+AI indicator badge
+
+Accent
+
+#FFDBFD
+
+Rose bg with Primary text: “✨ AI”
+
+AI typing dots
+
+Primary pulsing
+
+#6367FF
+
+3 dots pulsing animation in Primary color
+
+Pro feature badge
+
+Primary → Secondary
+
+Gradient
+
+Linear gradient left-to-right for premium badges
+
+Notification dot
+
+Error Red
+
+#EF4444
+
+8px red dot on bell icon for unread notifications
+
+Online indicator
+
+Success Green
+
+#10B981
+
+10px green dot on avatar for online status
+
+Toast success
+
+Success bg
+
+#ECFDF5
+
+Green bg, dark green text, green left border
+
+Toast error
+
+Error bg
+
+#FEF2F2
+
+Red bg, dark red text, red left border
+
+Skeleton loading
+
+Neutral 200 → 100
+
+Pulse
+
+Animated pulse between N200 and N100
+
+
+
+
+
+6. Accessibility & Contrast
+
+All color combinations must meet WCAG 2.1 AA standards (4.5:1 contrast ratio for normal text, 3:1 for large text). Below are verified contrast ratios for common pairings.
+
+
+
+Combination
+
+Text
+
+Background
+
+Ratio
+
+WCAG AA
+
+Primary on White
+
+#6367FF
+
+#FFFFFF
+
+4.6:1
+
+✔ Pass (normal + large text)
+
+Primary Dark on White
+
+#4A4ED9
+
+#FFFFFF
+
+5.8:1
+
+✔ Pass (all text sizes)
+
+White on Primary
+
+#FFFFFF
+
+#6367FF
+
+4.6:1
+
+✔ Pass (normal + large text)
+
+Neutral 900 on White
+
+#0F0F1A
+
+#FFFFFF
+
+18.2:1
+
+✔ Pass (excellent)
+
+Neutral 600 on White
+
+#44445E
+
+#FFFFFF
+
+8.1:1
+
+✔ Pass (body text)
+
+Neutral 500 on White
+
+#6B6B85
+
+#FFFFFF
+
+4.8:1
+
+✔ Pass (secondary text)
+
+Neutral 400 on White
+
+#9494AB
+
+#FFFFFF
+
+3.1:1
+
+✔ Pass (large text only)
+
+Primary on Neutral 50
+
+#6367FF
+
+#F8F8FC
+
+4.3:1
+
+✔ Pass (large text)
+
+White on Neutral 800
+
+#FFFFFF
+
+#1A1A2E
+
+15.6:1
+
+✔ Pass (sidebar text)
+
+Success Dark on Success BG
+
+#059669
+
+#ECFDF5
+
+4.8:1
+
+✔ Pass (status text)
+
+Error Dark on Error BG
+
+#DC2626
+
+#FEF2F2
+
+5.2:1
+
+✔ Pass (error text)
+
+Warning Dark on Warning BG
+
+#D97706
+
+#FFFBEB
+
+4.5:1
+
+✔ Pass (warning text)
+
+
+
+Accessibility Rules
+
+•  Never use Primary (#6367FF) as text on colored backgrounds — only on white or Neutral 50
+
+•  Neutral 400 (#9494AB) is only WCAG AA for large text (18px+). Use Neutral 500 for small text
+
+•  Always provide focus rings (3px Primary at 20% opacity) for keyboard navigation
+
+•  Never rely on color alone to convey meaning — always pair with icons and/or text labels
+
+•  Test all color combinations with a color blindness simulator (Deuteranopia, Protanopia, Tritanopia)
+
+•  Dark mode: invert Neutral scale. Primary stays the same (sufficient contrast on dark backgrounds)
+
+
+
+7. Dark Mode Palette
+
+InvoiceFlow supports automatic dark mode. Brand colors remain unchanged. Neutrals invert. Semantic colors shift to slightly desaturated variants on dark backgrounds.
+
+
+
+Element
+
+Light Mode
+
+Dark Mode
+
+Notes
+
+Page background
+
+#F8F8FC
+
+#0F0F1A
+
+Deep purple-black, never pure #000000
+
+Card surface
+
+#FFFFFF
+
+#1A1A2E
+
+Dark navy cards on darker background
+
+Elevated surface
+
+#FFFFFF
+
+#2D2D44
+
+Modals, dropdowns slightly lighter than cards
+
+Primary text
+
+#0F0F1A
+
+#F8F8FC
+
+Near-white text on dark backgrounds
+
+Secondary text
+
+#44445E
+
+#9494AB
+
+Muted text for descriptions
+
+Borders
+
+#DDDDE8
+
+#2D2D44
+
+Subtle borders on dark surfaces
+
+Primary button
+
+#6367FF
+
+#6367FF
+
+No change — brand colors stay consistent
+
+Primary hover
+
+#4A4ED9
+
+#8494FF
+
+Lighter hover on dark backgrounds
+
+Input background
+
+#FFFFFF
+
+#1A1A2E
+
+Dark surface inputs
+
+Input border
+
+#DDDDE8
+
+#44445E
+
+Subtle borders visible on dark bg
+
+Focus ring
+
+#6367FF33
+
+#6367FF4D
+
+Slightly stronger glow in dark mode
+
+Success bg
+
+#ECFDF5
+
+#059669 15%
+
+Semi-transparent green on dark surface
+
+Error bg
+
+#FEF2F2
+
+#DC2626 15%
+
+Semi-transparent red on dark surface
+
+
+
+
+
+8. CSS / Tailwind Tokens
+
+Copy-paste ready CSS custom properties and Tailwind config values for development.
+
+
+
+8.1 CSS Custom Properties
+
+:root {
+
+
+
+  /* Brand Colors */
+
+  --color-primary: #6367FF;
+
+  --color-secondary: #8494FF;
+
+  --color-tertiary: #C9BEFF;
+
+  --color-accent: #FFDBFD;
+
+
+
+  /* Primary Shades */
+
+  --color-primary-900: #1E2078;
+
+  --color-primary-700: #3538B2;
+
+  --color-primary-600: #4A4ED9;
+
+  --color-primary-500: #6367FF;
+
+  --color-primary-400: #8494FF;
+
+  --color-primary-200: #C9BEFF;
+
+  --color-primary-50:  #EEEEFF;
+
+
+
+  /* Neutrals */
+
+  --color-neutral-900: #0F0F1A;
+
+  --color-neutral-800: #1A1A2E;
+
+  --color-neutral-700: #2D2D44;
+
+  --color-neutral-600: #44445E;
+
+  --color-neutral-500: #6B6B85;
+
+  --color-neutral-400: #9494AB;
+
+  --color-neutral-300: #BFBFD1;
+
+  --color-neutral-200: #DDDDE8;
+
+  --color-neutral-100: #EFEFF4;
+
+  --color-neutral-50:  #F8F8FC;
+
+
+
+  /* Semantic */
+
+  --color-success: #10B981;
+
+  --color-success-dark: #059669;
+
+  --color-success-bg: #ECFDF5;
+
+  --color-error: #EF4444;
+
+  --color-error-dark: #DC2626;
+
+  --color-error-bg: #FEF2F2;
+
+  --color-warning: #F59E0B;
+
+  --color-warning-dark: #D97706;
+
+  --color-warning-bg: #FFFBEB;
+
+  --color-info: #3B82F6;
+
+  --color-info-dark: #2563EB;
+
+  --color-info-bg: #EFF6FF;
+
+}
+
+
+
+8.2 Tailwind Config
+
+// tailwind.config.js
+
+module.exports = {
+
+  theme: {
+
+    extend: {
+
+      colors: {
+
+        brand: {
+
+          primary:   '#6367FF',
+
+          secondary: '#8494FF',
+
+          tertiary:  '#C9BEFF',
+
+          accent:    '#FFDBFD',
+
+        },
+
+        neutral: {
+
+          900: '#0F0F1A',
+
+          800: '#1A1A2E',
+
+          700: '#2D2D44',
+
+          600: '#44445E',
+
+          500: '#6B6B85',
+
+          400: '#9494AB',
+
+          300: '#BFBFD1',
+
+          200: '#DDDDE8',
+
+          100: '#EFEFF4',
+
+          50:  '#F8F8FC',
+
+        },
+
+      },
+
+    },
+
+  },
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+InvoiceFlow Color System
+
+4 Brand Colors  •  7 Shade Scales  •  11 Neutrals  •  4 Semantic Palettes
+
+7 Invoice Statuses  •  WCAG AA Verified  •  Dark Mode Ready
+
+CSS Tokens  •  Tailwind Config  •  Full UI Application Guide
+
+
+

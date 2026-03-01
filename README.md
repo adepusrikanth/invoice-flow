@@ -1,0 +1,55 @@
+# InvoiceFlow AI
+
+Full SaaS application built from the design documents (UI/UX, DB/API, Color Palette, Product Vision). **37 pages** including landing, pricing, auth, dashboard, invoices, clients, payments, reports, expenses, recurring, settings, client portal. The OpenAI API key is **never** exposed to the frontend and is only used server-side via `process.env.OPENAI_API_KEY`.
+
+## Security
+
+- **OpenAI API key**: Loaded only from environment variable `OPENAI_API_KEY` on the server. Never sent to the client, never logged, never committed.
+- **Secrets**: `.env`, `.env.local`, and `openai_APIkey.txt` are in `.gitignore`. Do not commit them.
+- **Auth**: Session cookies (httpOnly, signed with JWT). Passwords hashed with bcrypt.
+
+## Local setup (test on localhost)
+
+1. **Node**: Use Node 18+.
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Environment**
+   - Create `.env` in the project root with: `DATABASE_URL=file:./dev.db` (Prisma uses this).
+   - Create `.env.local` with:
+     - `OPENAI_API_KEY=<your key>` (copy the value from `openai_APIkey.txt`; never commit this file or the key).
+     - Optional: `JWT_SECRET=<random 32+ char string>`.
+   - Do not commit `.env` or `.env.local`.
+
+4. **Database**
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+5. **Run**
+   ```bash
+   npm run dev
+   ```
+
+6. **Open in browser**
+   - **http://localhost:3000**
+
+   From there you can register, sign in, paste invoice text or upload `.txt`/`.json` files, and view extracted invoices. AI extraction runs only on the server using `OPENAI_API_KEY`.
+
+## Push to GitHub later
+
+- Ensure `.env.local`, `openai_APIkey.txt`, and any secret files are not committed (they are in `.gitignore`).
+- Set `OPENAI_API_KEY` and `JWT_SECRET` in your deployment environment (e.g. GitHub Actions secrets or host env vars); never put them in the repo.
+
+## Scripts
+
+| Command        | Description              |
+|----------------|--------------------------|
+| `npm run dev`  | Start dev server         |
+| `npm run build`| Production build         |
+| `npm run start`| Start production server  |
+| `npm run db:push` | Apply Prisma schema   |

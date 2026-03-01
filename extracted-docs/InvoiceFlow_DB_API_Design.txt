@@ -1,0 +1,2686 @@
+
+
+TECHNICAL DOCUMENTATION
+
+InvoiceFlow
+
+Database Schema & REST API Design
+
+PostgreSQL  •  Node.js  •  REST API  •  v1.0
+
+
+
+February 2026  •  Confidential
+
+
+
+1. Architecture Overview
+
+InvoiceFlow uses a modern, scalable architecture built on PostgreSQL for data persistence, Redis for caching and job queues, and a RESTful API built with Node.js (Express). The system follows a multi-tenant architecture where each user’s data is logically isolated using organization-level scoping.
+
+1.1 System Architecture
+
+Component
+
+Technology
+
+Purpose
+
+Database
+
+PostgreSQL 16
+
+Primary data store, ACID transactions
+
+Cache
+
+Redis 7
+
+Session store, rate limiting, job queue
+
+API Server
+
+Node.js + Express
+
+REST API, business logic
+
+Auth
+
+Clerk / JWT
+
+Authentication, session management
+
+File Storage
+
+AWS S3 / Cloudflare R2
+
+Invoice PDFs, logos, receipts
+
+Job Queue
+
+BullMQ (Redis)
+
+Email sending, PDF generation, reminders
+
+Search
+
+PostgreSQL FTS
+
+Full-text search on invoices, clients
+
+Payments
+
+Stripe API
+
+Payment processing, subscriptions
+
+
+
+1.2 Entity Relationship Overview
+
+The database is organized around these core entities: Organizations (multi-tenant), Users, Clients, Invoices, Invoice Items, Payments, Expenses, and Recurring Schedules. Below is the relationship structure:
+
+Organization (1) ─── (*) User
+
+Organization (1) ─── (*) Client
+
+Organization (1) ─── (*) Invoice
+
+Client        (1) ─── (*) Invoice
+
+Invoice       (1) ─── (*) InvoiceItem
+
+Invoice       (1) ─── (*) Payment
+
+Invoice       (1) ─── (0..1) RecurringSchedule
+
+Organization  (1) ─── (*) Expense
+
+User          (1) ─── (*) AuditLog
+
+
+
+2. Database Schema
+
+All tables use UUID primary keys for security and scalability. Timestamps use timestamptz for timezone-aware storage. Soft deletes are implemented via deleted_at columns.
+
+Table: organizations
+
+Column
+
+Type
+
+Nullable
+
+Default
+
+Description
+
+id
+
+UUID
+
+NO
+
+gen_random_uuid()
+
+Primary key
+
+name
+
+VARCHAR(255)
+
+NO
+
+—
+
+Organization name
+
+slug
+
+VARCHAR(100)
+
+NO
+
+—
+
+URL-friendly identifier
+
+email
+
+VARCHAR(255)
+
+NO
+
+—
+
+Primary contact email
+
+phone
+
+VARCHAR(50)
+
+YES
+
+NULL
+
+Contact phone
+
+address
+
+JSONB
+
+YES
+
+NULL
+
+Full address object
+
+logo_url
+
+TEXT
+
+YES
+
+NULL
+
+S3 URL for logo
+
+brand_color
+
+VARCHAR(7)
+
+YES
+
+'#2E86C1'
+
+Hex color for branding
+
+currency
+
+VARCHAR(3)
+
+NO
+
+'USD'
+
+Default currency (ISO 4217)
+
+tax_id
+
+VARCHAR(50)
+
+YES
+
+NULL
+
+Tax/GST/VAT number
+
+plan
+
+VARCHAR(20)
+
+NO
+
+'free'
+
+Subscription plan
+
+stripe_customer_id
+
+VARCHAR(255)
+
+YES
+
+NULL
+
+Stripe customer ID
+
+settings
+
+JSONB
+
+YES
+
+'{}'
+
+Custom settings JSON
+
+created_at
+
+TIMESTAMPTZ
+
+NO
+
+NOW()
+
+Creation timestamp
+
+updated_at
+
+TIMESTAMPTZ
+
+NO
+
+NOW()
+
+Last update
+
+deleted_at
+
+TIMESTAMPTZ
+
+YES
+
+NULL
+
+Soft delete
+
+
+
+Table: users
+
+Column
+
+Type
+
+Nullable
+
+Default
+
+Description
+
+id
+
+UUID
+
+NO
+
+gen_random_uuid()
+
+Primary key
+
+org_id
+
+UUID
+
+NO
+
+—
+
+FK → organizations.id
+
+email
+
+VARCHAR(255)
+
+NO
+
+—
+
+User email (unique)
+
+name
+
+VARCHAR(255)
+
+NO
+
+—
+
+Full name
+
+role
+
+VARCHAR(20)
+
+NO
+
+'member'
+
+owner | admin | member
+
+avatar_url
+
+TEXT
+
+YES
+
+NULL
+
+Profile image URL
+
+clerk_user_id
+
+VARCHAR(255)
+
+YES
+
+NULL
+
+External auth ID
+
+last_login_at
+
+TIMESTAMPTZ
+
+YES
+
+NULL
+
+Last login time
+
+is_active
+
+BOOLEAN
+
+NO
+
+TRUE
+
+Account active status
+
+created_at
+
+TIMESTAMPTZ
+
+NO
+
+NOW()
+
+Creation timestamp
+
+updated_at
+
+TIMESTAMPTZ
+
+NO
+
+NOW()
+
+Last update
+
+
+
+Table: clients
+
+Column
+
+Type
+
+Nullable
+
+Default
+
+Description
+
+id
+
+UUID
+
+NO
+
+gen_random_uuid()
+
+Primary key
+
+org_id
+
+UUID
+
+NO
+
+—
+
+FK → organizations.id
+
+name
+
+VARCHAR(255)
+
+NO
+
+—
+
+Client/company name
+
+email
+
+VARCHAR(255)
+
+NO
+
+—
+
+Client email
+
+phone
+
+VARCHAR(50)
+
+YES
+
+NULL
+
+Phone number
+
+company
+
+VARCHAR(255)
+
+YES
+
+NULL
+
+Company name
+
+address
+
+JSONB
+
+YES
+
+NULL
+
+Full address object
+
+tax_id
+
+VARCHAR(50)
+
+YES
+
+NULL
+
+Client tax ID
+
+currency
+
+VARCHAR(3)
+
+YES
+
+NULL
+
+Preferred currency
+
+notes
+
+TEXT
+
+YES
+
+NULL
+
+Internal notes
+
+tags
+
+TEXT[]
+
+YES
+
+'{}'
+
+Tags for organization
+
+total_billed
+
+DECIMAL(12,2)
+
+NO
+
+0.00
+
+Cumulative billed
+
+total_paid
+
+DECIMAL(12,2)
+
+NO
+
+0.00
+
+Cumulative paid
+
+created_at
+
+TIMESTAMPTZ
+
+NO
+
+NOW()
+
+Creation timestamp
+
+updated_at
+
+TIMESTAMPTZ
+
+NO
+
+NOW()
+
+Last update
+
+deleted_at
+
+TIMESTAMPTZ
+
+YES
+
+NULL
+
+Soft delete
+
+
+
+
+
+Table: invoices
+
+Column
+
+Type
+
+Nullable
+
+Default
+
+Description
+
+id
+
+UUID
+
+NO
+
+gen_random_uuid()
+
+Primary key
+
+org_id
+
+UUID
+
+NO
+
+—
+
+FK → organizations.id
+
+client_id
+
+UUID
+
+NO
+
+—
+
+FK → clients.id
+
+created_by
+
+UUID
+
+NO
+
+—
+
+FK → users.id
+
+invoice_number
+
+VARCHAR(50)
+
+NO
+
+—
+
+Auto-generated (INV-0001)
+
+status
+
+VARCHAR(20)
+
+NO
+
+'draft'
+
+draft|sent|viewed|paid|overdue|cancelled
+
+issue_date
+
+DATE
+
+NO
+
+CURRENT_DATE
+
+Invoice issue date
+
+due_date
+
+DATE
+
+NO
+
+—
+
+Payment due date
+
+currency
+
+VARCHAR(3)
+
+NO
+
+'USD'
+
+Invoice currency
+
+subtotal
+
+DECIMAL(12,2)
+
+NO
+
+0.00
+
+Sum of line items
+
+tax_rate
+
+DECIMAL(5,2)
+
+YES
+
+NULL
+
+Tax percentage
+
+tax_amount
+
+DECIMAL(12,2)
+
+NO
+
+0.00
+
+Calculated tax
+
+discount_type
+
+VARCHAR(10)
+
+YES
+
+NULL
+
+percentage | fixed
+
+discount_value
+
+DECIMAL(12,2)
+
+YES
+
+NULL
+
+Discount amount
+
+total
+
+DECIMAL(12,2)
+
+NO
+
+0.00
+
+Final total amount
+
+amount_paid
+
+DECIMAL(12,2)
+
+NO
+
+0.00
+
+Total paid so far
+
+amount_due
+
+DECIMAL(12,2)
+
+NO
+
+0.00
+
+Remaining balance
+
+notes
+
+TEXT
+
+YES
+
+NULL
+
+Notes to client
+
+terms
+
+TEXT
+
+YES
+
+NULL
+
+Payment terms
+
+pdf_url
+
+TEXT
+
+YES
+
+NULL
+
+Generated PDF URL
+
+view_token
+
+VARCHAR(64)
+
+NO
+
+random
+
+Unique token for client portal
+
+sent_at
+
+TIMESTAMPTZ
+
+YES
+
+NULL
+
+When email was sent
+
+viewed_at
+
+TIMESTAMPTZ
+
+YES
+
+NULL
+
+When client viewed
+
+paid_at
+
+TIMESTAMPTZ
+
+YES
+
+NULL
+
+When fully paid
+
+recurring_id
+
+UUID
+
+YES
+
+NULL
+
+FK → recurring_schedules.id
+
+metadata
+
+JSONB
+
+YES
+
+'{}'
+
+Custom fields
+
+created_at
+
+TIMESTAMPTZ
+
+NO
+
+NOW()
+
+Creation timestamp
+
+updated_at
+
+TIMESTAMPTZ
+
+NO
+
+NOW()
+
+Last update
+
+deleted_at
+
+TIMESTAMPTZ
+
+YES
+
+NULL
+
+Soft delete
+
+
+
+Table: invoice_items
+
+Column
+
+Type
+
+Nullable
+
+Default
+
+Description
+
+id
+
+UUID
+
+NO
+
+gen_random_uuid()
+
+Primary key
+
+invoice_id
+
+UUID
+
+NO
+
+—
+
+FK → invoices.id
+
+description
+
+TEXT
+
+NO
+
+—
+
+Line item description
+
+quantity
+
+DECIMAL(10,2)
+
+NO
+
+1
+
+Quantity
+
+unit_price
+
+DECIMAL(12,2)
+
+NO
+
+—
+
+Price per unit
+
+amount
+
+DECIMAL(12,2)
+
+NO
+
+—
+
+quantity * unit_price
+
+tax_rate
+
+DECIMAL(5,2)
+
+YES
+
+NULL
+
+Item-level tax
+
+sort_order
+
+INTEGER
+
+NO
+
+0
+
+Display order
+
+created_at
+
+TIMESTAMPTZ
+
+NO
+
+NOW()
+
+Creation timestamp
+
+
+
+Table: payments
+
+Column
+
+Type
+
+Nullable
+
+Default
+
+Description
+
+id
+
+UUID
+
+NO
+
+gen_random_uuid()
+
+Primary key
+
+invoice_id
+
+UUID
+
+NO
+
+—
+
+FK → invoices.id
+
+org_id
+
+UUID
+
+NO
+
+—
+
+FK → organizations.id
+
+amount
+
+DECIMAL(12,2)
+
+NO
+
+—
+
+Payment amount
+
+currency
+
+VARCHAR(3)
+
+NO
+
+'USD'
+
+Payment currency
+
+method
+
+VARCHAR(30)
+
+NO
+
+—
+
+stripe|paypal|bank|cash|other
+
+status
+
+VARCHAR(20)
+
+NO
+
+'pending'
+
+pending|completed|failed|refunded
+
+stripe_payment_id
+
+VARCHAR(255)
+
+YES
+
+NULL
+
+Stripe payment intent ID
+
+reference
+
+VARCHAR(255)
+
+YES
+
+NULL
+
+External reference number
+
+notes
+
+TEXT
+
+YES
+
+NULL
+
+Payment notes
+
+paid_at
+
+TIMESTAMPTZ
+
+YES
+
+NULL
+
+When payment completed
+
+created_at
+
+TIMESTAMPTZ
+
+NO
+
+NOW()
+
+Creation timestamp
+
+
+
+Table: recurring_schedules
+
+Column
+
+Type
+
+Nullable
+
+Default
+
+Description
+
+id
+
+UUID
+
+NO
+
+gen_random_uuid()
+
+Primary key
+
+org_id
+
+UUID
+
+NO
+
+—
+
+FK → organizations.id
+
+client_id
+
+UUID
+
+NO
+
+—
+
+FK → clients.id
+
+frequency
+
+VARCHAR(20)
+
+NO
+
+—
+
+weekly|monthly|quarterly|yearly
+
+interval
+
+INTEGER
+
+NO
+
+1
+
+Every N periods
+
+next_date
+
+DATE
+
+NO
+
+—
+
+Next invoice date
+
+end_date
+
+DATE
+
+YES
+
+NULL
+
+Schedule end date
+
+template
+
+JSONB
+
+NO
+
+—
+
+Invoice template data
+
+is_active
+
+BOOLEAN
+
+NO
+
+TRUE
+
+Schedule active
+
+total_generated
+
+INTEGER
+
+NO
+
+0
+
+Invoices generated
+
+created_at
+
+TIMESTAMPTZ
+
+NO
+
+NOW()
+
+Creation timestamp
+
+updated_at
+
+TIMESTAMPTZ
+
+NO
+
+NOW()
+
+Last update
+
+
+
+
+
+Table: expenses
+
+Column
+
+Type
+
+Nullable
+
+Default
+
+Description
+
+id
+
+UUID
+
+NO
+
+gen_random_uuid()
+
+Primary key
+
+org_id
+
+UUID
+
+NO
+
+—
+
+FK → organizations.id
+
+user_id
+
+UUID
+
+NO
+
+—
+
+FK → users.id
+
+category
+
+VARCHAR(50)
+
+NO
+
+—
+
+Expense category
+
+description
+
+TEXT
+
+NO
+
+—
+
+Expense description
+
+amount
+
+DECIMAL(12,2)
+
+NO
+
+—
+
+Expense amount
+
+currency
+
+VARCHAR(3)
+
+NO
+
+'USD'
+
+Currency
+
+date
+
+DATE
+
+NO
+
+CURRENT_DATE
+
+Expense date
+
+receipt_url
+
+TEXT
+
+YES
+
+NULL
+
+Receipt file URL
+
+is_billable
+
+BOOLEAN
+
+NO
+
+FALSE
+
+Can bill to client
+
+client_id
+
+UUID
+
+YES
+
+NULL
+
+FK → clients.id
+
+invoice_id
+
+UUID
+
+YES
+
+NULL
+
+FK → invoices.id
+
+created_at
+
+TIMESTAMPTZ
+
+NO
+
+NOW()
+
+Creation timestamp
+
+
+
+Table: audit_logs
+
+Column
+
+Type
+
+Nullable
+
+Default
+
+Description
+
+id
+
+UUID
+
+NO
+
+gen_random_uuid()
+
+Primary key
+
+org_id
+
+UUID
+
+NO
+
+—
+
+FK → organizations.id
+
+user_id
+
+UUID
+
+YES
+
+NULL
+
+FK → users.id
+
+entity_type
+
+VARCHAR(50)
+
+NO
+
+—
+
+invoice|client|payment|etc
+
+entity_id
+
+UUID
+
+NO
+
+—
+
+ID of affected entity
+
+action
+
+VARCHAR(20)
+
+NO
+
+—
+
+create|update|delete|send|view
+
+changes
+
+JSONB
+
+YES
+
+NULL
+
+Before/after diff
+
+ip_address
+
+INET
+
+YES
+
+NULL
+
+Request IP
+
+user_agent
+
+TEXT
+
+YES
+
+NULL
+
+Browser user agent
+
+created_at
+
+TIMESTAMPTZ
+
+NO
+
+NOW()
+
+Event timestamp
+
+
+
+2.1 Key Indexes
+
+-- Performance indexes
+
+CREATE INDEX idx_invoices_org_status ON invoices(org_id, status);
+
+CREATE INDEX idx_invoices_client ON invoices(client_id);
+
+CREATE INDEX idx_invoices_due_date ON invoices(due_date) WHERE status != 'paid';
+
+CREATE INDEX idx_invoices_number ON invoices(org_id, invoice_number);
+
+CREATE INDEX idx_payments_invoice ON payments(invoice_id);
+
+CREATE INDEX idx_clients_org ON clients(org_id) WHERE deleted_at IS NULL;
+
+CREATE INDEX idx_expenses_org_date ON expenses(org_id, date);
+
+CREATE INDEX idx_audit_entity ON audit_logs(entity_type, entity_id);
+
+CREATE INDEX idx_recurring_next ON recurring_schedules(next_date) WHERE is_active;
+
+
+
+-- Full-text search
+
+CREATE INDEX idx_invoices_search ON invoices
+
+  USING GIN(to_tsvector('english', invoice_number || ' ' || notes));
+
+CREATE INDEX idx_clients_search ON clients
+
+  USING GIN(to_tsvector('english', name || ' ' || email || ' ' || company));
+
+
+
+
+
+3. REST API Design
+
+The API follows REST conventions with JSON request/response bodies. All endpoints require authentication via Bearer token. Responses use standard HTTP status codes and include pagination for list endpoints.
+
+3.1 Base URL & Authentication
+
+Base URL:  https://api.invoiceflow.com/v1
+
+
+
+Headers:
+
+  Authorization: Bearer <api_key>
+
+  Content-Type: application/json
+
+  X-Organization-Id: <org_uuid>  (for multi-org users)
+
+
+
+Rate Limits:
+
+  Free:     100 requests/hour
+
+  Starter:  1,000 requests/hour
+
+  Pro:      5,000 requests/hour
+
+  Business: 20,000 requests/hour
+
+
+
+3.2 Standard Response Format
+
+// Success
+
+{
+
+  "success": true,
+
+  "data": { ... },
+
+  "meta": { "page": 1, "per_page": 20, "total": 150 }
+
+}
+
+
+
+// Error
+
+{
+
+  "success": false,
+
+  "error": {
+
+    "code": "VALIDATION_ERROR",
+
+    "message": "Invalid email address",
+
+    "details": [{ "field": "email", "message": "must be valid" }]
+
+  }
+
+}
+
+
+
+3.3 Invoices API
+
+GET
+
+/v1/invoices
+
+List all invoices with filtering, sorting, and pagination.
+
+Parameters:
+
+Name
+
+Type
+
+Required
+
+Description
+
+status
+
+string
+
+No
+
+Filter: draft|sent|paid|overdue|cancelled
+
+client_id
+
+UUID
+
+No
+
+Filter by client
+
+date_from
+
+date
+
+No
+
+Filter invoices from date
+
+date_to
+
+date
+
+No
+
+Filter invoices to date
+
+search
+
+string
+
+No
+
+Search invoice number, notes
+
+sort
+
+string
+
+No
+
+Sort field: created_at|due_date|total
+
+order
+
+string
+
+No
+
+asc or desc (default: desc)
+
+page
+
+integer
+
+No
+
+Page number (default: 1)
+
+per_page
+
+integer
+
+No
+
+Results per page (default: 20, max: 100)
+
+Response Fields:
+
+Field
+
+Type
+
+Description
+
+id
+
+UUID
+
+Invoice ID
+
+invoice_number
+
+string
+
+Display number (INV-0001)
+
+client
+
+object
+
+Client name and email
+
+status
+
+string
+
+Current status
+
+total
+
+decimal
+
+Invoice total
+
+amount_due
+
+decimal
+
+Remaining balance
+
+due_date
+
+date
+
+Payment due date
+
+
+
+POST
+
+/v1/invoices
+
+Create a new invoice.
+
+Parameters:
+
+Name
+
+Type
+
+Required
+
+Description
+
+client_id
+
+UUID
+
+Yes
+
+Client to bill
+
+issue_date
+
+date
+
+No
+
+Invoice date (default: today)
+
+due_date
+
+date
+
+Yes
+
+Payment due date
+
+currency
+
+string
+
+No
+
+ISO 4217 currency code
+
+items
+
+array
+
+Yes
+
+Array of line items
+
+items[].description
+
+string
+
+Yes
+
+Item description
+
+items[].quantity
+
+decimal
+
+Yes
+
+Quantity
+
+items[].unit_price
+
+decimal
+
+Yes
+
+Price per unit
+
+tax_rate
+
+decimal
+
+No
+
+Tax percentage
+
+discount_type
+
+string
+
+No
+
+percentage or fixed
+
+discount_value
+
+decimal
+
+No
+
+Discount amount
+
+notes
+
+string
+
+No
+
+Notes shown to client
+
+terms
+
+string
+
+No
+
+Payment terms text
+
+
+
+GET
+
+/v1/invoices/:id
+
+Get a single invoice with all details.
+
+Response Fields:
+
+Field
+
+Type
+
+Description
+
+id
+
+UUID
+
+Invoice ID
+
+invoice_number
+
+string
+
+Display number
+
+client
+
+object
+
+Full client details
+
+items
+
+array
+
+All line items
+
+payments
+
+array
+
+Payment history
+
+status
+
+string
+
+Current status
+
+total
+
+decimal
+
+Invoice total
+
+pdf_url
+
+string
+
+Download URL for PDF
+
+
+
+PUT
+
+/v1/invoices/:id
+
+Update an existing invoice (draft only).
+
+Parameters:
+
+Name
+
+Type
+
+Required
+
+Description
+
+client_id
+
+UUID
+
+No
+
+Change client
+
+due_date
+
+date
+
+No
+
+Update due date
+
+items
+
+array
+
+No
+
+Replace line items
+
+notes
+
+string
+
+No
+
+Update notes
+
+
+
+POST
+
+/v1/invoices/:id/send
+
+Send invoice to client via email.
+
+Parameters:
+
+Name
+
+Type
+
+Required
+
+Description
+
+email
+
+string
+
+No
+
+Override recipient email
+
+message
+
+string
+
+No
+
+Custom email message
+
+cc
+
+string[]
+
+No
+
+CC email addresses
+
+
+
+POST
+
+/v1/invoices/:id/remind
+
+Send a payment reminder to client.
+
+Parameters:
+
+Name
+
+Type
+
+Required
+
+Description
+
+message
+
+string
+
+No
+
+Custom reminder message
+
+urgency
+
+string
+
+No
+
+gentle|firm|urgent
+
+
+
+DELETE
+
+/v1/invoices/:id
+
+Soft delete an invoice (draft/cancelled only).
+
+
+
+
+
+3.4 Clients API
+
+GET
+
+/v1/clients
+
+List all clients with search and pagination.
+
+Parameters:
+
+Name
+
+Type
+
+Required
+
+Description
+
+search
+
+string
+
+No
+
+Search name, email, company
+
+tags
+
+string
+
+No
+
+Filter by tags (comma-separated)
+
+sort
+
+string
+
+No
+
+Sort: name|total_billed|created_at
+
+page
+
+integer
+
+No
+
+Page number
+
+
+
+POST
+
+/v1/clients
+
+Create a new client.
+
+Parameters:
+
+Name
+
+Type
+
+Required
+
+Description
+
+name
+
+string
+
+Yes
+
+Client name
+
+email
+
+string
+
+Yes
+
+Client email
+
+phone
+
+string
+
+No
+
+Phone number
+
+company
+
+string
+
+No
+
+Company name
+
+address
+
+object
+
+No
+
+Address object
+
+tax_id
+
+string
+
+No
+
+Tax identification
+
+currency
+
+string
+
+No
+
+Preferred currency
+
+notes
+
+string
+
+No
+
+Internal notes
+
+tags
+
+string[]
+
+No
+
+Tags for organization
+
+
+
+GET
+
+/v1/clients/:id
+
+Get client details with invoice summary.
+
+
+
+PUT
+
+/v1/clients/:id
+
+Update client information.
+
+
+
+DELETE
+
+/v1/clients/:id
+
+Soft delete a client.
+
+
+
+3.5 Payments API
+
+GET
+
+/v1/payments
+
+List all payments with filters.
+
+Parameters:
+
+Name
+
+Type
+
+Required
+
+Description
+
+invoice_id
+
+UUID
+
+No
+
+Filter by invoice
+
+status
+
+string
+
+No
+
+Filter: pending|completed|failed
+
+date_from
+
+date
+
+No
+
+Filter from date
+
+date_to
+
+date
+
+No
+
+Filter to date
+
+
+
+POST
+
+/v1/invoices/:id/payments
+
+Record a payment against an invoice.
+
+Parameters:
+
+Name
+
+Type
+
+Required
+
+Description
+
+amount
+
+decimal
+
+Yes
+
+Payment amount
+
+method
+
+string
+
+Yes
+
+stripe|paypal|bank|cash|other
+
+reference
+
+string
+
+No
+
+External reference number
+
+paid_at
+
+datetime
+
+No
+
+Payment date (default: now)
+
+notes
+
+string
+
+No
+
+Payment notes
+
+
+
+3.6 Recurring Billing API
+
+POST
+
+/v1/recurring
+
+Create a recurring invoice schedule.
+
+Parameters:
+
+Name
+
+Type
+
+Required
+
+Description
+
+client_id
+
+UUID
+
+Yes
+
+Client to bill
+
+frequency
+
+string
+
+Yes
+
+weekly|monthly|quarterly|yearly
+
+interval
+
+integer
+
+No
+
+Every N periods (default: 1)
+
+start_date
+
+date
+
+Yes
+
+First invoice date
+
+end_date
+
+date
+
+No
+
+Schedule end date
+
+template
+
+object
+
+Yes
+
+Invoice template (items, tax, notes)
+
+
+
+GET
+
+/v1/recurring
+
+List all recurring schedules.
+
+
+
+PUT
+
+/v1/recurring/:id
+
+Update a recurring schedule.
+
+
+
+DELETE
+
+/v1/recurring/:id
+
+Cancel a recurring schedule.
+
+
+
+3.7 Dashboard & Reports API
+
+GET
+
+/v1/dashboard/summary
+
+Get overview metrics for the dashboard.
+
+Parameters:
+
+Name
+
+Type
+
+Required
+
+Description
+
+period
+
+string
+
+No
+
+this_month|last_month|this_year|custom
+
+date_from
+
+date
+
+No
+
+Custom period start
+
+date_to
+
+date
+
+No
+
+Custom period end
+
+Response Fields:
+
+Field
+
+Type
+
+Description
+
+total_invoiced
+
+decimal
+
+Total amount invoiced
+
+total_collected
+
+decimal
+
+Total payments received
+
+total_outstanding
+
+decimal
+
+Unpaid invoice total
+
+total_overdue
+
+decimal
+
+Overdue amount
+
+invoice_count
+
+object
+
+Count by status
+
+top_clients
+
+array
+
+Top 5 clients by revenue
+
+monthly_trend
+
+array
+
+12-month revenue trend
+
+
+
+GET
+
+/v1/reports/tax
+
+Generate tax report for a period.
+
+Parameters:
+
+Name
+
+Type
+
+Required
+
+Description
+
+date_from
+
+date
+
+Yes
+
+Report start date
+
+date_to
+
+date
+
+Yes
+
+Report end date
+
+format
+
+string
+
+No
+
+json|csv|pdf
+
+
+
+GET
+
+/v1/reports/profit-loss
+
+Generate profit & loss statement.
+
+Parameters:
+
+Name
+
+Type
+
+Required
+
+Description
+
+date_from
+
+date
+
+Yes
+
+Report start date
+
+date_to
+
+date
+
+Yes
+
+Report end date
+
+
+
+4. Webhooks
+
+InvoiceFlow sends webhook events for key actions. Clients can register webhook URLs in their dashboard. Events are delivered with retry logic (3 attempts with exponential backoff).
+
+Event
+
+Description
+
+invoice.created
+
+New invoice created
+
+invoice.sent
+
+Invoice emailed to client
+
+invoice.viewed
+
+Client opened the invoice
+
+invoice.paid
+
+Invoice fully paid
+
+invoice.overdue
+
+Invoice passed due date
+
+payment.received
+
+Payment recorded
+
+payment.failed
+
+Payment attempt failed
+
+client.created
+
+New client added
+
+recurring.generated
+
+Recurring invoice auto-created
+
+subscription.upgraded
+
+User upgraded plan
+
+subscription.cancelled
+
+User cancelled subscription
+
+
+
+Ready to Build?
+
+This schema supports 100K+ invoices per organization with proper indexing.
+
+Start with the MVP tables (organizations, users, clients, invoices, invoice_items, payments) and add the rest as needed.
+
+
+

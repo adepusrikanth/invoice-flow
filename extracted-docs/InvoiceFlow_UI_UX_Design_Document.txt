@@ -1,0 +1,2768 @@
+
+
+UI / UX DESIGN DOCUMENT
+
+
+
+InvoiceFlow
+
+AI-Powered Invoice & Billing Platform
+
+
+
+40+ PAGES
+
+120+ COMPONENTS
+
+6 USER ROLES
+
+FULL DESIGN SYSTEM
+
+
+
+What’s Inside This Document
+
+1. Design System — Colors, typography, spacing, shadows, component library
+
+2. Global Components — Sidebar, header, AI chat widget, notifications
+
+3. Public Pages — Landing page, pricing, signup, login, blog
+
+4. Dashboard & Analytics — Home dashboard, reports, cash flow
+
+5. Invoice Module — List, create, edit, preview, send, PDF
+
+6. Client Module — Client list, profile, portal
+
+7. Payments Module — Payment tracking, gateway setup, receipts
+
+8. AI Chat Assistant — Chat interface, command palette, voice input
+
+9. Settings & Admin — Business profile, team, roles, billing, integrations
+
+10. Mobile Screens — Responsive layouts, mobile-first flows
+
+11. User Flows — End-to-end journeys for each role
+
+12. UX Pilot Prompts — Ready-to-use prompts for every page
+
+
+
+February 2026  •  Version 1.0  •  Confidential
+
+
+
+Table of Contents
+
+
+
+
+
+
+
+
+
+1. Design System
+
+InvoiceFlow uses a clean, modern design system built for simplicity, accessibility, and scalability. The system adapts to light/dark mode and supports right-to-left (RTL) languages.
+
+
+
+1.2 Typography
+
+Element
+
+Font
+
+Size
+
+Weight
+
+Usage
+
+Display
+
+Inter
+
+36px
+
+Bold (700)
+
+Landing hero, empty states
+
+H1
+
+Inter
+
+28px
+
+Bold (700)
+
+Page titles
+
+H2
+
+Inter
+
+22px
+
+Semibold (600)
+
+Section headings
+
+H3
+
+Inter
+
+18px
+
+Semibold (600)
+
+Card titles, sub-sections
+
+Body
+
+Inter
+
+14px
+
+Regular (400)
+
+Body text, descriptions
+
+Body Small
+
+Inter
+
+13px
+
+Regular (400)
+
+Secondary text, timestamps
+
+Caption
+
+Inter
+
+12px
+
+Medium (500)
+
+Labels, badges, tags
+
+Code / Mono
+
+JetBrains Mono
+
+13px
+
+Regular (400)
+
+Invoice numbers, API keys, amounts
+
+Button
+
+Inter
+
+14px
+
+Medium (500)
+
+All button labels
+
+Input
+
+Inter
+
+14px
+
+Regular (400)
+
+Form input text
+
+
+
+1.3 Spacing & Grid
+
+Token
+
+Value
+
+Usage
+
+space-xs
+
+4px
+
+Icon padding, tight inline spacing
+
+space-sm
+
+8px
+
+Between related elements, tag padding
+
+space-md
+
+16px
+
+Card padding, input padding, standard gap
+
+space-lg
+
+24px
+
+Section spacing, card margin
+
+space-xl
+
+32px
+
+Between major sections
+
+space-2xl
+
+48px
+
+Page top/bottom padding
+
+Grid columns
+
+12-column grid
+
+Max-width: 1280px, gutter: 24px
+
+Sidebar width
+
+260px (expanded) / 72px (collapsed)
+
+Left sidebar navigation
+
+Card radius
+
+12px
+
+All cards, modals, dropdowns
+
+Button radius
+
+8px
+
+All buttons
+
+Input radius
+
+8px
+
+All form inputs, selects, textareas
+
+Shadow sm
+
+0 1px 2px rgba(0,0,0,0.05)
+
+Buttons, inputs on focus
+
+Shadow md
+
+0 4px 6px rgba(0,0,0,0.07)
+
+Cards, dropdowns
+
+Shadow lg
+
+0 10px 25px rgba(0,0,0,0.1)
+
+Modals, popovers
+
+
+
+1.4 Component Library
+
+Component
+
+Variants
+
+Sizes
+
+States
+
+Button
+
+Primary, Secondary, Ghost, Danger, Success, Icon-only
+
+sm (32px), md (40px), lg (48px)
+
+Default, Hover, Active, Disabled, Loading
+
+Input
+
+Text, Number, Email, Password, Search, Textarea
+
+sm, md, lg
+
+Default, Focus, Error, Disabled, Read-only
+
+Select
+
+Single, Multi, Searchable, Creatable
+
+sm, md, lg
+
+Default, Open, Selected, Error
+
+Badge
+
+Status, Count, Tag, AI indicator
+
+sm, md
+
+Default (8 colors), Outline, Dot
+
+Card
+
+Default, Hoverable, Selected, Stat card, Action card
+
+Auto-height
+
+Default, Hover, Selected, Loading skeleton
+
+Table
+
+Default, Sortable, Selectable, Expandable
+
+Compact, Default, Relaxed
+
+Default, Loading, Empty, Selected rows
+
+Modal
+
+Default, Full-screen, Side panel, Confirm dialog
+
+sm (400px), md (600px), lg (800px)
+
+Open, Closing animation, Loading
+
+Toast
+
+Success, Error, Warning, Info
+
+Auto-width
+
+Entering, Visible (5s), Exiting
+
+Tooltip
+
+Default, Rich (with actions)
+
+Auto
+
+Hover-triggered, 200ms delay
+
+Avatar
+
+Image, Initials, Icon
+
+xs (24), sm (32), md (40), lg (56)
+
+Default, Online indicator, Group stack
+
+Tabs
+
+Default, Pill, Underline
+
+Full-width, Fit-content
+
+Active, Inactive, Disabled
+
+Chart
+
+Line, Bar, Doughnut, Area, Sparkline
+
+Responsive
+
+Default, Hover tooltip, Loading skeleton
+
+Sidebar Nav
+
+Item, Group, Collapsible, Badge count
+
+Expanded (260px), Collapsed (72px)
+
+Active, Hover, Collapsed icon-only
+
+AI Chat Bubble
+
+User message, AI response, Action card, Loading
+
+Auto-height
+
+Typing indicator, Streaming, Complete
+
+Invoice Preview
+
+A4/Letter card, Mini thumbnail, Full PDF
+
+Responsive
+
+Draft watermark, Branded, Printable
+
+Status Pill
+
+Draft, Sent, Viewed, Paid, Overdue, Cancelled
+
+sm, md
+
+Static, Animated (for live status changes)
+
+
+
+1.5 Iconography
+
+Use Lucide Icons (open-source, consistent, clean). Sizes: 16px (inline), 20px (default), 24px (buttons/nav). Stroke width: 1.5px. Color inherits from text color. Key icons:
+
+Action
+
+Icon Name
+
+Action
+
+Icon Name
+
+Dashboard
+
+LayoutDashboard
+
+Invoices
+
+FileText
+
+Clients
+
+Users
+
+Payments
+
+CreditCard
+
+Reports
+
+BarChart3
+
+Settings
+
+Settings
+
+AI Chat
+
+MessageSquareMore
+
+Search
+
+Search
+
+Create New
+
+Plus
+
+Send
+
+Send
+
+Delete
+
+Trash2
+
+Edit
+
+Pencil
+
+Download PDF
+
+Download
+
+WhatsApp
+
+MessageCircle
+
+Recurring
+
+RefreshCw
+
+Voice Input
+
+Mic
+
+Filter
+
+Filter
+
+Sort
+
+ArrowUpDown
+
+Notifications
+
+Bell
+
+Help
+
+HelpCircle
+
+
+
+
+
+2. Global Layout & Navigation
+
+2.1 App Shell Layout
+
+┌──────────────────────────────────────────────────────────────┐
+
+│ [Logo]  InvoiceFlow        [Search]  [🔔] [🤖 AI] [Avatar ▼] │
+
+├───────────┬──────────────────────────────────────────────────┤
+
+│ 📊 Dashboard │                                                  │
+
+│ 📄 Invoices  │          MAIN CONTENT AREA                       │
+
+│ 👥 Clients   │                                                  │
+
+│ 💳 Payments  │    (Changes based on selected page)              │
+
+│ 📈 Reports   │                                                  │
+
+│ 📦 Expenses  │                                                  │
+
+│ 🔄 Recurring │                                                  │
+
+│           │                                                  │
+
+│ ──────── │                                                  │
+
+│ ⚙ Settings  │                                                  │
+
+│ ❓ Help      │                                                  │
+
+└───────────┴──────────────────────────────────────────────────┘
+
+                          [ 🤖 AI Chat FAB Button ]              
+
+
+
+The sidebar collapses to icon-only (72px) on smaller screens or user toggle. The AI chat opens as a slide-over panel from the right side. The global search (Cmd+K) opens a command palette modal.
+
+
+
+2.2 Sidebar Navigation (Role-Based)
+
+Nav Item
+
+Super Admin
+
+Admin
+
+Manager
+
+Staff
+
+Viewer
+
+Client
+
+Dashboard
+
+✔
+
+✔
+
+✔
+
+✔
+
+✔
+
+✔
+
+Invoices
+
+✔
+
+✔
+
+✔
+
+✔
+
+✔ (own)
+
+✔ (own)
+
+Clients
+
+✔
+
+✔
+
+✔
+
+✔ (assigned)
+
+✘
+
+✘
+
+Payments
+
+✔
+
+✔
+
+✔
+
+✔
+
+✔
+
+✔ (own)
+
+Reports
+
+✔
+
+✔
+
+✔
+
+✘
+
+✔
+
+✘
+
+Expenses
+
+✔
+
+✔
+
+✔
+
+✔
+
+✘
+
+✘
+
+Recurring
+
+✔
+
+✔
+
+✔
+
+✘
+
+✘
+
+✘
+
+AI Chat
+
+✔
+
+✔
+
+✔
+
+✔
+
+✔
+
+✔
+
+Team
+
+✔
+
+✔
+
+✘
+
+✘
+
+✘
+
+✘
+
+Settings
+
+✔
+
+✔
+
+✘
+
+✘
+
+✘
+
+✘
+
+Billing
+
+✔
+
+✘
+
+✘
+
+✘
+
+✘
+
+✘
+
+API
+
+✔
+
+✘
+
+✘
+
+✘
+
+✘
+
+✘
+
+
+
+
+
+3. Public Pages (Pre-Login)
+
+Page 3.1: Landing Page
+
+Route
+
+/
+
+Description
+
+Marketing homepage that converts visitors into sign-ups. Hero section with value proposition, feature showcase, industry cards, pricing preview, testimonials, and CTA.
+
+Auth Required
+
+No — Public page
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a modern SaaS landing page for InvoiceFlow — an AI-powered invoicing platform. Use a clean white background with #1A73E8 blue accents and #0A1F3F dark navy headings.
+
+Hero section: Large heading ‘Create Invoices in Seconds with AI’ with subtext, a ‘Start Free’ CTA button, and a floating mockup of the dashboard showing an invoice being created.
+
+Features grid: 6 cards with icons showing AI Invoice Generator, Smart Reminders, Multi-Currency, Client Portal, Expense Tracking, and Tax Reports.
+
+Industry carousel: Cards for Restaurant, Freelancer, Agency, Shopkeeper, Manufacturer each showing a use-case illustration.
+
+Social proof: Logo bar of payment partners (Stripe, PayPal, Razorpay), 3 testimonial cards, and stats (50K+ invoices created, 120+ countries).
+
+Pricing preview: 4-tier cards (Free, Starter $9, Pro $29, Business $79) with key features and CTA.
+
+Footer: Links, newsletter signup, social icons, app store badges.
+
+
+
+Layout Wireframe:
+
+┌──────────────────────────────────────────────────┐
+
+│ [Logo]       Features  Pricing  Blog  [Login] [Start Free] │
+
+├──────────────────────────────────────────────────┤
+
+│  HERO: “Create Invoices        [┌─────────────┐]  │
+
+│   in Seconds with AI”        [│ Dashboard  │]  │
+
+│  [subtext]                    [│ Mockup    │]  │
+
+│  [ Start Free → ]            [└─────────────┘]  │
+
+├──────────────────────────────────────────────────┤
+
+│ [🤖 AI Gen] [💰 Reminders] [🌐 Currency] [👤 Portal]  │
+
+├──────────────────────────────────────────────────┤
+
+│ Industries: [Restaurant] [Freelancer] [Agency] [Shop]    │
+
+├──────────────────────────────────────────────────┤
+
+│ Pricing: [Free] [$9 Starter] [$29 Pro] [$79 Business]    │
+
+└──────────────────────────────────────────────────┘
+
+
+
+UI Elements:
+
+Element
+
+Type
+
+Specification
+
+Navbar
+
+Sticky header
+
+Transparent → white on scroll, 64px height, logo + nav links + CTA
+
+Hero heading
+
+H1 text
+
+48px bold Inter, “Create Invoices in Seconds with AI”
+
+CTA button
+
+Primary button
+
+48px tall, 200px wide, “Start Free →”, blue #1A73E8
+
+Dashboard mockup
+
+Image/animation
+
+Floating card with shadow, slight 3D tilt, shows invoice creation
+
+Feature cards
+
+Grid (3x2)
+
+Icon + title + 2-line description, 12px radius, hover lift
+
+Industry carousel
+
+Horizontal scroll
+
+Cards with illustration + industry name + 1-line use case
+
+Testimonial cards
+
+Carousel (3)
+
+Avatar + name + role + quote, star rating
+
+Pricing cards
+
+Grid (4)
+
+Highlighted “Pro” card (popular), feature checkmarks, CTA per tier
+
+Footer
+
+4-column grid
+
+Product, Company, Resources, Legal + social links
+
+
+
+
+
+Page 3.2: Signup Page
+
+Route
+
+/signup
+
+Description
+
+Quick registration page optimized for conversion. Support phone, email, and Google/Apple SSO.
+
+Auth Required
+
+No — Public page
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a clean, minimal signup page for InvoiceFlow. Split layout: Left side has a blue gradient background with branding, testimonial quote, and illustration. Right side has the signup form.
+
+Form fields: Full Name, Email / Phone (toggle), Password, Business Type (dropdown: Freelancer, Shop, Restaurant, Agency, Manufacturer, Other).
+
+Social login buttons: Continue with Google, Continue with Apple. Divider: ‘or sign up with email’.
+
+Bottom: ‘Already have an account? Log in’ link. Terms checkbox: ‘I agree to Terms & Privacy Policy’.
+
+Primary CTA: ‘Create Free Account’ blue button, full width. Show password strength indicator.
+
+
+
+UI Elements:
+
+Element
+
+Type
+
+Specification
+
+Brand panel (left)
+
+Container
+
+Blue gradient (#0A1F3F to #1A73E8), logo, tagline, testimonial quote with avatar
+
+Signup form (right)
+
+Form card
+
+White bg, centered, max-width 440px, 32px padding
+
+Name input
+
+Text input
+
+Placeholder: “Your full name”, auto-focus on load
+
+Email/Phone toggle
+
+Tab switch
+
+Two tabs: Email | Phone. Phone shows country code selector
+
+Password input
+
+Password field
+
+Show/hide toggle, strength meter (weak/medium/strong)
+
+Business type
+
+Select dropdown
+
+6 options with icons: Freelancer, Shop, Restaurant, Agency, Manufacturer, Other
+
+SSO buttons
+
+Button group
+
+Google (colored logo), Apple (black), full-width, 44px height
+
+Submit button
+
+Primary button
+
+Full-width, 48px, “Create Free Account”
+
+
+
+
+
+Page 3.3: Login Page
+
+Route
+
+/login
+
+Description
+
+Simple login with email/phone + password or SSO. Supports “Remember me” and forgot password.
+
+Auth Required
+
+No — Public page
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a minimal login page matching the signup page layout. Left branding panel, right login form.
+
+Fields: Email/Phone input, Password with show/hide, Remember me checkbox, Forgot password link.
+
+SSO: Google and Apple buttons. Bottom link: ‘Don’t have an account? Sign up free’.
+
+
+
+
+
+Page 3.4: Pricing Page
+
+Route
+
+/pricing
+
+Description
+
+Full pricing comparison page with toggle between monthly/annual billing. Feature matrix for all 5 tiers.
+
+Auth Required
+
+No — Public page
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a pricing page with monthly/annual toggle (annual shows 20% off badge). 5 columns: Free, Starter $9, Pro $29 (highlighted as Popular), Business $79, Enterprise (Contact Sales).
+
+Each card shows: Price, tagline, feature list with check/cross icons, CTA button.
+
+Below cards: Full feature comparison table with categories (Invoicing, AI Features, Payments, Support, Security).
+
+FAQ accordion section at bottom with 8 common pricing questions.
+
+
+
+
+
+
+
+4. Dashboard & Analytics Pages
+
+Page 4.1: Main Dashboard
+
+Route
+
+/dashboard
+
+Description
+
+Overview page showing key metrics, recent activity, AI insights, and quick actions. Adapts layout based on user role.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a modern SaaS dashboard for InvoiceFlow. Clean white background, left sidebar (260px, dark navy #0A1F3F).
+
+Top row: 4 stat cards in a row — Total Revenue (green), Outstanding (amber), Overdue (red), Invoices This Month (blue). Each card has icon, amount, percentage change vs last month.
+
+Middle row: Left — Revenue chart (area chart, 12 months, blue gradient fill). Right — Invoice status doughnut chart (Draft, Sent, Paid, Overdue).
+
+Bottom left: Recent invoices table (5 rows) with columns: Invoice #, Client, Amount, Status badge, Due Date, Actions (view/send).
+
+Bottom right: AI Insights card with 3 bullet items: ‘You have 5 overdue invoices totaling $12,400’, ‘Client XYZ has not viewed Invoice #0032’, ‘Cash flow forecast: +$8,200 expected this week’.
+
+Floating button bottom-right: AI Chat bubble (purple gradient, chat icon).
+
+
+
+Layout Wireframe:
+
+┌────────┬─────────────────────────────────────────┐
+
+│ SIDEBAR │ Good morning, Ramesh!        [Search] [🔔] [👤] │
+
+│        ├─────────┬────────┬────────┬─────────────┤
+
+│        │₹45,200  │₹12,000 │₹3,500  │  28 invoices  │
+
+│        │Revenue ✔│Pending │Overdue │  this month   │
+
+│        ├─────────┴────────┴────────┴─────────────┤
+
+│        │ [▁▂▃▅▆▇ Revenue Chart]  [○ Doughnut Chart] │
+
+│        ├─────────────────────┬───────────────────┤
+
+│        │ Recent Invoices Table  │ 🤖 AI Insights     │
+
+│        │ INV-0102  Paid   ₹8K  │ • 5 overdue       │
+
+│        │ INV-0101  Sent  ₹12K  │ • Cash flow: +8K  │
+
+│        │ INV-0100  Overdue      │ • Follow up: XYZ  │
+
+└────────┴─────────────────────┴───────────────────┘
+
+
+
+UI Elements:
+
+Element
+
+Type
+
+Specification
+
+Stat cards
+
+Card row (4)
+
+Each: icon (24px), amount (H2, mono font), label, ↑/↓ % badge, sparkline
+
+Revenue chart
+
+Area chart
+
+Recharts AreaChart, 12 months, blue gradient fill, tooltip on hover
+
+Status doughnut
+
+Doughnut chart
+
+Recharts PieChart, 4 segments (Draft=gray, Sent=blue, Paid=green, Overdue=red)
+
+Recent invoices
+
+Table
+
+5 rows, columns: #, Client avatar+name, Amount (mono), Status pill, Due date, kebab menu
+
+AI Insights card
+
+Card
+
+Purple left border, robot icon, 3 insight items with action links
+
+Quick actions
+
+Button group
+
+Inline: + New Invoice, + New Client, View Reports
+
+AI Chat FAB
+
+Floating button
+
+56px circle, bottom-right 24px margin, purple gradient, pulse animation on new AI insight
+
+
+
+States & Interactions:
+
+State
+
+Behavior
+
+Loading
+
+4 skeleton stat cards (pulse animation), skeleton chart, skeleton table rows
+
+Empty (new user)
+
+Welcome illustration, “Create your first invoice” CTA, setup checklist (5 steps with progress)
+
+Solo mode
+
+Simplified: 3 stat cards, no team section, larger chart, AI prominently placed
+
+Manager mode
+
+Shows team performance sidebar: top billers, pending approvals
+
+
+
+Page 4.2: Reports Page
+
+Route
+
+/reports
+
+Description
+
+Financial reports hub with pre-built reports and AI report generator.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a reports page with tabs: Overview, Revenue, Clients, Tax, Custom (AI). Overview shows 6 report cards in a 3x2 grid.
+
+Each card: report icon, title, description, date range selector, ‘Generate’ button.
+
+Reports: Revenue Summary, Profit & Loss, Accounts Receivable Aging, Top Clients, Tax Report (GST/VAT), Expense Summary.
+
+At top: a text input with AI icon — ‘Ask AI: describe the report you need’ (e.g., ‘Show me revenue by client for Q1’).
+
+When a report is generated, show it as a data table with charts, with Export (CSV, PDF, Excel) buttons.
+
+
+
+
+
+
+
+5. Invoice Module
+
+Page 5.1: Invoice List
+
+Route
+
+/invoices
+
+Description
+
+Main invoice management page with filterable, sortable list of all invoices.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design an invoice list page. Top: page title ‘Invoices’ with [ + New Invoice ] blue button and AI quick-create input.
+
+Filter bar: Status pills (All, Draft, Sent, Viewed, Paid, Overdue), Date range picker, Client dropdown, Amount range, Search box.
+
+Table columns: Checkbox, Invoice # (monospace), Client (avatar + name), Amount (right-aligned, monospace), Status (colored pill), Issue Date, Due Date, Actions (view, send, download, duplicate, delete kebab menu).
+
+Bottom: Pagination (showing 1-20 of 156), rows per page selector.
+
+Selected rows show bulk action bar: Send Selected, Download PDFs, Mark as Paid, Delete.
+
+
+
+Layout Wireframe:
+
+┌──────────────────────────────────────────────────┐
+
+│ Invoices                        [ + New Invoice ] │
+
+│ [🤖 Quick: “Create invoice for...”              ] │
+
+├──────────────────────────────────────────────────┤
+
+│ [All] [Draft] [Sent] [Paid] [Overdue] [📅 Date] │
+
+├──────────────────────────────────────────────────┤
+
+│ ☐ | INV-0102 | Acme Corp  | $8,500 | Paid ✔  | ⋮ │
+
+│ ☐ | INV-0101 | TechVibe  | $3,200 | Sent ✉  | ⋮ │
+
+│ ☐ | INV-0100 | Raj Foods | $4,720 | Overdue⚠| ⋮ │
+
+│ ☐ | INV-0099 | NewClient | $1,500 | Draft ✏ | ⋮ │
+
+├──────────────────────────────────────────────────┤
+
+│                    Showing 1-20 of 156  [< 1 2 3 >] │
+
+└──────────────────────────────────────────────────┘
+
+
+
+
+
+Page 5.2: Create / Edit Invoice
+
+Route
+
+/invoices/new | /invoices/:id/edit
+
+Description
+
+Full invoice creation form with live preview panel. Supports AI auto-fill, templates, and line item management.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a split-screen invoice creation page. Left side (60%): Form. Right side (40%): Live invoice preview that updates in real-time.
+
+Form sections: 1) Client selector (searchable dropdown with + Add New), 2) Invoice details (number auto-filled, issue date, due date, currency), 3) Line items table (description, qty, rate, amount with + Add Item button), 4) Totals (subtotal, tax dropdown, discount, total), 5) Notes and Terms textareas.
+
+Top bar: [Back] Invoice Title editable | [Save Draft] [Preview] [Send Invoice] buttons.
+
+AI assist: Purple AI button next to line items — ‘AI: Suggest items based on client history’. Also AI button for notes: ‘AI: Generate professional notes’.
+
+Right preview: A4 paper card showing branded invoice preview with user’s logo, colors. Updates live as form changes. Zoom in/out control.
+
+Templates: Template selector dropdown at top of form with 5 template thumbnails.
+
+
+
+Layout Wireframe:
+
+┌──────────────────────────────────────────────────┐
+
+│ ← Back  |  New Invoice     [Save Draft] [Send →] │
+
+├─────────────────────────────┬────────────────────┤
+
+│ FORM (60%)                   │ LIVE PREVIEW (40%)  │
+
+│                              │                     │
+
+│ Client: [Select client  ▼]   │  ┌───────────────┐ │
+
+│ Date: [02/28]  Due: [03/30]  │  │ [Logo]        │ │
+
+│ Template: [□□□□□]           │  │ INVOICE       │ │
+
+│                              │  │ #INV-0103    │ │
+
+│ LINE ITEMS:                  │  │               │ │
+
+│ Description | Qty | Rate |Amt│  │ Item 1  $500  │ │
+
+│ Web Design  |  1  | 500  |500│  │ Item 2  $200  │ │
+
+│ Hosting     |  1  | 200  |200│  │               │ │
+
+│ [+ Add Item] [🤖 AI Suggest] │  │ Total: $700   │ │
+
+│                              │  └───────────────┘ │
+
+│ Subtotal:     $700           │                     │
+
+│ Tax (18% GST): $126          │   [Zoom +] [Zoom -] │
+
+│ Total:         $826          │   [Download PDF]    │
+
+└─────────────────────────────┴────────────────────┘
+
+
+
+
+
+Page 5.3: Invoice Detail / View
+
+Route
+
+/invoices/:id
+
+Description
+
+Read-only view of a single invoice with full details, payment history, activity timeline, and action buttons.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design an invoice detail page. Top: Invoice number + status badge, action buttons (Edit, Send, Record Payment, Download PDF, Share Link, More...).
+
+Layout: Left (65%) — Invoice preview card (A4 styled). Right (35%) — Details panel with tabs: Overview, Payments, Activity.
+
+Overview tab: Client info card, dates, amounts, payment link QR code.
+
+Payments tab: List of payments with date, amount, method, status.
+
+Activity tab: Timeline of events (created, sent, viewed, reminded, paid) with timestamps.
+
+
+
+
+
+Page 5.4: Send Invoice Modal
+
+Route
+
+/invoices/:id/send (modal)
+
+Description
+
+Modal dialog for sending invoice via email, WhatsApp, or generating a share link.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a send invoice modal (600px wide). Three tabs: Email, WhatsApp, Share Link.
+
+Email tab: To (pre-filled with client email), CC, Subject (pre-filled), Message textarea (AI-generated default message with edit option), [Send Email] button.
+
+WhatsApp tab: Phone number (pre-filled), preview of WhatsApp message with invoice PDF attachment, [Send via WhatsApp] button.
+
+Share Link tab: Generated URL with copy button, QR code for the link, expiry date selector.
+
+
+
+
+
+
+
+6. Client Module
+
+Page 6.1: Client List
+
+Route
+
+/clients
+
+Description
+
+Client management page with search, tags, and quick stats per client.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a client list page. Top: ‘Clients’ heading, [ + Add Client ] button, search bar.
+
+View toggle: List view (table) / Card view (grid). Filter by tags.
+
+Table: Avatar + Name, Email, Phone, Total Billed (monospace), Total Paid, Outstanding, Last Invoice date, Tags, Actions kebab.
+
+Card view: Cards with avatar, name, company, outstanding amount (red if overdue), tag pills, mini sparkline of billing history.
+
+
+
+
+
+Page 6.2: Client Profile
+
+Route
+
+/clients/:id
+
+Description
+
+Detailed client page showing all related invoices, payments, notes, and AI insights.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a client profile page. Header: Large avatar + name + company + email + phone, with Edit button and AI insight badge (‘Good payer — avg 5 days’).
+
+Stats row: Total Billed, Total Paid, Outstanding, Average Payment Time — 4 stat cards.
+
+Tabs: Invoices (filtered table), Payments (list), Notes (editable), Documents (attachments), Activity (timeline).
+
+Right sidebar: AI Client Summary — payment behavior, risk score gauge (Low/Medium/High), predicted lifetime value, suggested actions.
+
+
+
+
+
+Page 6.3: Client Portal (External)
+
+Route
+
+/portal/:token
+
+Description
+
+External-facing portal for clients to view their invoices, make payments, and download receipts. No login required (token-based access).
+
+Auth Required
+
+No — Token-based public access
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a clean client portal page. Branded with the business’s logo and colors (customizable).
+
+Header: Business logo + ‘Invoice Portal’ text. No sidebar (minimal layout).
+
+Content: Invoice card showing all details (number, date, items, total), prominent [Pay Now] button (green, large).
+
+If multiple invoices: Table showing all invoices from this business to this client. Each row has View and Pay buttons.
+
+Payment methods: Stripe checkout, PayPal, Bank Transfer details. Receipt download button after payment.
+
+
+
+
+
+
+
+7. Payments & Expenses
+
+Page 7.1: Payments Dashboard
+
+Route
+
+/payments
+
+Description
+
+Payment tracking page showing all transactions, reconciliation status, and payment analytics.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a payments page. Top stat cards: Total Received (green), Pending (amber), Failed (red), This Month vs Last Month.
+
+Filter bar: Date range, Payment method, Status, Client.
+
+Table: Date, Invoice #, Client, Amount, Method (with icon: card/bank/cash), Status pill, Reference, Actions.
+
+Right panel (collapsible): Payment analytics — Revenue by method (pie chart), Daily collections (bar chart).
+
+
+
+
+
+Page 7.2: Expenses Page
+
+Route
+
+/expenses
+
+Description
+
+Expense tracking with receipt capture, categorization, and billable marking.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design an expense tracking page. Top: ‘Expenses’ + [ + Add Expense ] + camera icon (receipt capture).
+
+Filter: Category dropdown (Travel, Office, Software, Meals, etc.), Date range, Billable toggle.
+
+Table: Date, Category (colored tag), Description, Amount, Receipt thumbnail, Billable checkbox, Client (if billable), Actions.
+
+Add Expense modal: Date, Category, Amount, Description, Receipt upload (drag & drop), Mark as billable toggle, Client selector.
+
+AI feature: ‘Scan Receipt’ button — AI reads receipt image and auto-fills category, amount, date, vendor name.
+
+
+
+
+
+
+
+8. AI Chat Assistant
+
+Page 8.1: AI Chat Panel
+
+Route
+
+Slide-over panel (right side)
+
+Description
+
+AI-powered chat interface that can create invoices, answer questions, generate reports, and provide business insights.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a slide-over chat panel (400px wide) that opens from the right side of the screen. Dark header (#0A1F3F) with ‘AI Assistant’ title, minimize and close buttons.
+
+Chat area: Scrollable message thread. User messages: right-aligned blue bubbles. AI responses: left-aligned white cards with robot avatar.
+
+AI response types: 1) Text responses (markdown supported), 2) Invoice card preview (clickable to open), 3) Data table (for reports), 4) Action buttons (Send Invoice, View Report, Create Reminder).
+
+Input area: Text input with placeholder ‘Ask me anything...’, microphone button (voice input), send button. Above input: Quick action chips: ‘Create Invoice’, ‘Show Overdue’, ‘Revenue Report’.
+
+Typing indicator: Three pulsing dots when AI is thinking. Streaming: Words appear one by one for natural feel.
+
+
+
+Layout Wireframe:
+
+                         ┌───────────────────────┐
+
+                         │ 🤖 AI Assistant   [–][✕] │
+
+                         ├───────────────────────┤
+
+                         │ 🤖 Hi! How can I help? │
+
+                         │                       │
+
+                         │  “Create invoice for  ” │
+
+                         │  “Raj, 50kg rice ₹80”  │
+
+                         │                       │
+
+                         │ 🤖 Done! Invoice      │
+
+                         │ ┌──────────────────┐ │
+
+                         │ │ INV-0847         │ │
+
+                         │ │ Raj’s Restaurant │ │
+
+                         │ │ ₹4,720 (incl GST)│ │
+
+                         │ │ [Send] [Edit]    │ │
+
+                         │ └──────────────────┘ │
+
+                         ├───────────────────────┤
+
+                         │ [Invoice] [Overdue] [Report]│
+
+                         │ [🎙] Type a message... [➤] │
+
+                         └───────────────────────┘
+
+
+
+
+
+Page 8.2: Command Palette
+
+Route
+
+Cmd+K / Ctrl+K modal
+
+Description
+
+Global search and command palette for power users. Keyboard-accessible quick actions.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a command palette modal (centered, 640px wide, no overlay dimming much). Search input at top with magnifying glass icon.
+
+Results grouped by type: Recent (3 items), Invoices (search results), Clients, Actions (Create Invoice, Send Reminder, Generate Report, Open Settings).
+
+Keyboard navigation: Arrow keys to move, Enter to select, Esc to close. Show keyboard shortcut hints next to actions.
+
+AI: If query doesn’t match anything, show ‘Ask AI: [query]’ option at bottom.
+
+
+
+
+
+
+
+9. Settings & Administration
+
+All settings pages share a common layout: left settings navigation menu + right content area.
+
+Page 9.1: Business Profile Settings
+
+Route
+
+/settings/profile
+
+Description
+
+Edit business name, logo, address, tax ID, branding colors, and default invoice settings.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a settings page with left nav (Profile, Team, Billing, Integrations, Notifications, Security, API, Data). Right content for Business Profile.
+
+Sections: Business Info (name, email, phone, address form), Branding (logo upload with preview, brand color picker, font selector), Invoice Defaults (default currency, tax rate, payment terms, notes template, invoice number prefix).
+
+Save button sticky at bottom of form. Show toast on save.
+
+
+
+
+
+Page 9.2: Team Management
+
+Route
+
+/settings/team
+
+Description
+
+Add, remove, and manage team members with role assignment. Shows current plan limits.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a team management page. Top: ‘Team Members’ heading, count badge (3/5 on Pro plan), [ + Invite Member ] button.
+
+Table: Avatar + Name, Email, Role (dropdown to change), Status (Active/Invited/Suspended), Last Active, Actions (remove, change role).
+
+Invite modal: Email input (multiple), Role selector, custom message. Show pending invitations separately.
+
+Plan limit indicator: Progress bar showing ‘3 of 5 seats used’ with upgrade CTA if near limit.
+
+
+
+
+
+Page 9.3: Billing & Subscription
+
+Route
+
+/settings/billing
+
+Description
+
+View current plan, manage subscription, payment method, and invoice history.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design a billing page. Top card: Current plan (highlighted), usage metrics (invoices used, AI queries used, team seats used) as progress bars.
+
+Plan comparison: 4 plan cards (current one highlighted with ‘Current Plan’ badge), Upgrade/Downgrade buttons.
+
+Payment method: Credit card on file (masked), Update Payment Method button.
+
+Billing history: Table of past invoices with Date, Amount, Status, Download PDF.
+
+
+
+
+
+Page 9.4: Integrations
+
+Route
+
+/settings/integrations
+
+Description
+
+Connect third-party services: payment gateways, accounting software, communication tools.
+
+Auth Required
+
+Yes — All authenticated roles
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design an integrations page. Grid of integration cards grouped by category.
+
+Categories: Payment Gateways (Stripe, Razorpay, PayPal), Accounting (QuickBooks, Xero, Tally), Communication (WhatsApp, Slack, Email), E-Commerce (Shopify, WooCommerce), Storage (Google Drive, Dropbox).
+
+Each card: Service logo, name, description, Connected/Not Connected status badge, [Connect] / [Manage] button.
+
+Connected integrations show: last sync time, data synced count, Disconnect button.
+
+
+
+
+
+Page 9.5: API & Webhooks
+
+Route
+
+/settings/api
+
+Description
+
+API key management and webhook configuration for developers.
+
+Auth Required
+
+Super Admin only
+
+Responsive
+
+Desktop + Tablet + Mobile
+
+
+
+UX Pilot Prompt:
+
+Design an API settings page. Section 1: API Keys — table of keys with name, key (masked with reveal toggle), created date, last used, Actions (regenerate, delete). [ + Create API Key ] button.
+
+Section 2: Webhooks — table of webhook endpoints with URL, events subscribed, status (active/paused), last triggered, failure count. [ + Add Webhook ] button.
+
+Section 3: API usage — Bar chart of requests per day (last 30 days), current rate limit tier, usage percentage.
+
+Code example card: Show sample API call with syntax highlighting (curl and Node.js tabs).
+
+
+
+
+
+
+
+10. Mobile Responsive Design
+
+All pages must be fully responsive. Below are key mobile-specific layouts and interactions for screens under 768px width.
+
+Screen
+
+Mobile Adaptation
+
+Key Mobile Interaction
+
+Dashboard
+
+Stack stat cards 2x2, charts full-width below, recent invoices as cards not table
+
+Pull-to-refresh, swipe between stat cards
+
+Invoice List
+
+Convert table to card list. Each card: number, client, amount, status. Swipe right to send, left to delete
+
+Swipe gestures, FAB for + New Invoice
+
+Create Invoice
+
+Single column form (no split preview). Preview as separate full-screen overlay on tap
+
+Sticky bottom bar: [Save] [Preview] [Send]
+
+Client List
+
+Card view only (no table). Client cards with avatar, name, outstanding amount
+
+Search bar at top, pull-to-refresh
+
+AI Chat
+
+Full-screen chat (replaces content area). Bottom sheet on small screens
+
+Voice input button prominent, quick chips above input
+
+Settings
+
+Settings nav becomes top dropdown/hamburger. Form sections as collapsible accordions
+
+Bottom sheet for selectors, modals go full-screen
+
+Sidebar Nav
+
+Hamburger menu → slide-in drawer from left, overlay content
+
+Swipe from left edge to open, tap outside to close
+
+Invoice PDF
+
+Pinch-to-zoom on PDF preview. Share button for WhatsApp/email/save
+
+Native share sheet integration
+
+
+
+10.1 Mobile Navigation
+
+┌─────────────────────┐     ┌─────────────────────┐
+
+│ [☰] InvoiceFlow [🔔][🤖]│     │  Dashboard    ✔     │
+
+├─────────────────────┤     │  Invoices          │
+
+│                     │     │  Clients           │
+
+│   CONTENT AREA      │     │  Payments           │
+
+│                     │     │  Reports            │
+
+│                     │     │  Expenses           │
+
+│                     │     │  ────────────────  │
+
+│                     │     │  Settings           │
+
+├─────────────────────┤     │  Help               │
+
+│[🏠][📄][➕][💳][🤖]│     └─────────────────────┘
+
+└─────────────────────┘      SLIDE-IN DRAWER
+
+  BOTTOM TAB BAR              (hamburger menu)
+
+
+
+Mobile uses a bottom tab bar (5 items: Home, Invoices, Create (+), Payments, AI Chat) for primary navigation. The hamburger menu provides access to all other sections.
+
+
+
+
+
+11. Key User Flows
+
+11.1 Invoice Creation Flow
+
+#
+
+Step
+
+Screen
+
+Action
+
+1
+
+Trigger
+
+Dashboard / Invoice list / AI chat / Cmd+K
+
+User clicks ‘+ New Invoice’ or types in AI chat
+
+2
+
+Select client
+
+Create invoice page
+
+Search existing or create new client inline
+
+3
+
+Add items
+
+Line items section
+
+Add items manually OR click ‘AI Suggest’ for auto-fill
+
+4
+
+Review totals
+
+Totals section + live preview
+
+Verify subtotal, tax, discount, total on preview
+
+5
+
+Add notes
+
+Notes/terms section
+
+Type custom or click ‘AI Generate’ for professional notes
+
+6
+
+Save or send
+
+Top action bar
+
+Save as draft OR send immediately via email/WhatsApp
+
+7
+
+Confirmation
+
+Toast + redirect
+
+Success toast, redirect to invoice detail page
+
+
+
+11.2 Shopkeeper Quick Invoice Flow (Mobile)
+
+#
+
+Step
+
+Screen
+
+Action
+
+1
+
+Open app
+
+Mobile dashboard
+
+Sees today’s sales and pending amounts
+
+2
+
+Tap AI chat
+
+Bottom tab → AI chat
+
+Opens full-screen AI chat
+
+3
+
+Voice command
+
+AI chat
+
+Says: “Raj ko 50 kilo rice ka bill banao, 80 rupaye kilo”
+
+4
+
+AI creates invoice
+
+AI chat → Invoice card
+
+AI shows invoice card: Raj, 50x₹80 + GST = ₹4,720
+
+5
+
+Confirm & send
+
+Invoice card in chat
+
+Taps ‘Send on WhatsApp’ button on the card
+
+6
+
+Done
+
+AI confirmation
+
+AI confirms: “Sent to Raj on WhatsApp. Reminder set for 15 days.”
+
+
+
+11.3 Onboarding Flow
+
+#
+
+Step
+
+Screen
+
+Action
+
+1
+
+Sign up
+
+Signup page
+
+Enter name, email/phone, password, business type
+
+2
+
+Verify
+
+OTP screen
+
+Enter 6-digit OTP sent to email/phone
+
+3
+
+Business setup
+
+Onboarding wizard step 1
+
+Business name, logo upload, address (auto-fill from GST for India)
+
+4
+
+Preferences
+
+Onboarding wizard step 2
+
+Default currency, tax rate, invoice template selection
+
+5
+
+First invoice
+
+Guided create invoice
+
+Pre-filled sample invoice with tooltips. Edit and send to self as test
+
+6
+
+Connect payment
+
+Onboarding wizard step 3
+
+One-click Stripe/Razorpay or skip for later
+
+7
+
+Invite team
+
+Onboarding wizard step 4
+
+Add team emails or skip (solo users)
+
+8
+
+Dashboard
+
+Main dashboard
+
+Lands on dashboard with checklist widget showing progress
+
+
+
+
+
+12. Complete Page Index
+
+Master list of all pages/screens in InvoiceFlow with route, access level, and priority for development.
+
+#
+
+Page Name
+
+Route
+
+Access
+
+Priority
+
+Phase
+
+1
+
+Landing Page
+
+/
+
+Public
+
+P0
+
+MVP
+
+2
+
+Pricing Page
+
+/pricing
+
+Public
+
+P0
+
+MVP
+
+3
+
+Signup
+
+/signup
+
+Public
+
+P0
+
+MVP
+
+4
+
+Login
+
+/login
+
+Public
+
+P0
+
+MVP
+
+5
+
+Forgot Password
+
+/forgot-password
+
+Public
+
+P0
+
+MVP
+
+6
+
+OTP Verification
+
+/verify
+
+Public
+
+P0
+
+MVP
+
+7
+
+Onboarding Wizard
+
+/onboarding
+
+Authenticated
+
+P0
+
+MVP
+
+8
+
+Main Dashboard
+
+/dashboard
+
+All roles
+
+P0
+
+MVP
+
+9
+
+Invoice List
+
+/invoices
+
+All roles
+
+P0
+
+MVP
+
+10
+
+Create Invoice
+
+/invoices/new
+
+Admin+
+
+P0
+
+MVP
+
+11
+
+Edit Invoice
+
+/invoices/:id/edit
+
+Admin+
+
+P0
+
+MVP
+
+12
+
+Invoice Detail
+
+/invoices/:id
+
+All roles
+
+P0
+
+MVP
+
+13
+
+Send Invoice Modal
+
+Modal overlay
+
+Admin+
+
+P0
+
+MVP
+
+14
+
+Client List
+
+/clients
+
+Staff+
+
+P0
+
+MVP
+
+15
+
+Add/Edit Client
+
+/clients/new
+
+Staff+
+
+P0
+
+MVP
+
+16
+
+Client Profile
+
+/clients/:id
+
+Staff+
+
+P1
+
+Phase 2
+
+17
+
+Payments Page
+
+/payments
+
+All roles
+
+P0
+
+MVP
+
+18
+
+Record Payment Modal
+
+Modal overlay
+
+Staff+
+
+P0
+
+MVP
+
+19
+
+Business Settings
+
+/settings/profile
+
+Admin+
+
+P0
+
+MVP
+
+20
+
+Team Management
+
+/settings/team
+
+Admin+
+
+P1
+
+Phase 2
+
+21
+
+Billing & Plans
+
+/settings/billing
+
+Super Admin
+
+P1
+
+Phase 2
+
+22
+
+Reports Hub
+
+/reports
+
+Manager+
+
+P1
+
+Phase 2
+
+23
+
+Revenue Report
+
+/reports/revenue
+
+Manager+
+
+P1
+
+Phase 2
+
+24
+
+Tax Report
+
+/reports/tax
+
+Manager+
+
+P1
+
+Phase 2
+
+25
+
+Expense List
+
+/expenses
+
+Staff+
+
+P1
+
+Phase 2
+
+26
+
+Add Expense Modal
+
+Modal overlay
+
+Staff+
+
+P1
+
+Phase 2
+
+27
+
+Recurring Billing
+
+/recurring
+
+Admin+
+
+P1
+
+Phase 2
+
+28
+
+AI Chat Panel
+
+Slide-over panel
+
+All roles
+
+P1
+
+Phase 2
+
+29
+
+Command Palette
+
+Cmd+K modal
+
+All roles
+
+P1
+
+Phase 2
+
+30
+
+Client Portal
+
+/portal/:token
+
+Public (token)
+
+P1
+
+Phase 2
+
+31
+
+Integrations
+
+/settings/integrations
+
+Admin+
+
+P2
+
+Phase 3
+
+32
+
+API & Webhooks
+
+/settings/api
+
+Super Admin
+
+P2
+
+Phase 3
+
+33
+
+Notification Settings
+
+/settings/notifications
+
+All roles
+
+P2
+
+Phase 3
+
+34
+
+Security Settings
+
+/settings/security
+
+Admin+
+
+P2
+
+Phase 3
+
+35
+
+Audit Log
+
+/settings/audit
+
+Admin+
+
+P2
+
+Phase 3
+
+36
+
+Template Editor
+
+/settings/templates
+
+Admin+
+
+P2
+
+Phase 3
+
+37
+
+Profit & Loss
+
+/reports/profit-loss
+
+Admin+
+
+P2
+
+Phase 3
+
+38
+
+Cash Flow Forecast
+
+/reports/cashflow
+
+Admin+ (AI)
+
+P2
+
+Phase 3
+
+39
+
+Client Insights (AI)
+
+/clients/:id/insights
+
+Admin+ (AI)
+
+P2
+
+Phase 3
+
+40
+
+WhatsApp Settings
+
+/settings/whatsapp
+
+Admin+
+
+P2
+
+Phase 3
+
+41
+
+Mobile Dashboard
+
+Mobile responsive
+
+All roles
+
+P0
+
+MVP
+
+42
+
+Mobile Invoice Create
+
+Mobile responsive
+
+Staff+
+
+P0
+
+MVP
+
+43
+
+Mobile AI Chat
+
+Full-screen mobile
+
+All roles
+
+P1
+
+Phase 2
+
+
+
+Design Document Summary
+
+43 Pages/Screens  •  16 Component Types  •  12 Color Tokens  •  3 User Flows
+
+6 Role-Based Layouts  •  8 Mobile Adaptations  •  Full UX Pilot Prompts
+
+
+
+Ready for UX Pilot → Copy any prompt from this doc directly into UX Pilot to generate screens.
+
+
+

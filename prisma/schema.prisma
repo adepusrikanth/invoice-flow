@@ -1,0 +1,145 @@
+// InvoiceFlow - design doc aligned, single-tenant (user-scoped) for MVP
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  password    String
+  name        String?
+  role        String   @default("member")
+  avatarUrl   String?
+  lastLoginAt DateTime?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  clients     Client[]
+  invoices    Invoice[]
+  expenses    Expense[]
+  templates   InvoiceTemplate[]
+}
+
+model InvoiceTemplate {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name            String
+  businessName    String
+  businessPhone   String?
+  businessEmail   String?
+  businessAddress String?
+  logoUrl         String?
+  accentColor     String   @default("#6367FF")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  invoices        Invoice[]
+}
+
+model Client {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  address     String?
+  taxId       String?
+  currency   String?
+  notes       String?
+  tags        String?  @default("[]")
+  totalBilled Float    @default(0)
+  totalPaid   Float    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  invoices    Invoice[]
+}
+
+model Invoice {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clientId      String?
+  client        Client?  @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  templateId    String?
+  template      InvoiceTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  invoiceNumber String
+  status        String   @default("draft")
+  issueDate     String
+  dueDate       String
+  currency      String   @default("USD")
+  subtotal      Float    @default(0)
+  taxRate       Float?
+  taxAmount     Float    @default(0)
+  discountType  String?
+  discountValue Float?
+  total         Float    @default(0)
+  amountPaid    Float    @default(0)
+  amountDue     Float    @default(0)
+  notes         String?
+  terms         String?
+  pdfUrl        String?
+  viewToken     String   @unique @default(cuid())
+  sentAt        DateTime?
+  viewedAt      DateTime?
+  paidAt        DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  items         InvoiceItem[]
+  payments      Payment[]
+}
+
+model InvoiceItem {
+  id          String   @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description String
+  quantity    Float    @default(1)
+  unitPrice   Float
+  amount      Float
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  invoiceId String
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  amount    Float
+  currency  String   @default("USD")
+  method    String
+  status    String   @default("completed")
+  reference String?
+  notes     String?
+  paidAt    DateTime?
+  createdAt DateTime @default(now())
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    String
+  description String
+  amount      Float
+  currency    String   @default("USD")
+  date        String
+  receiptUrl  String?
+  isBillable  Boolean  @default(false)
+  clientId    String?
+  createdAt   DateTime @default(now())
+}
+
+// Admin-only app settings (e.g. OpenAI API key). Not visible to regular users.
+model AppSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
