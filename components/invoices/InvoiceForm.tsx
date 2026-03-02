@@ -16,6 +16,7 @@ type Template = {
   businessPhone: string | null;
   businessEmail: string | null;
   businessAddress: string | null;
+  logoUrl?: string | null;
   accentColor: string;
 };
 type InvoiceWithRelations = {
@@ -304,7 +305,7 @@ export function InvoiceForm({ invoice }: { invoice?: InvoiceWithRelations }) {
                   total,
                   notes: notes || undefined,
                   terms: terms || undefined,
-                  template: selectedTemplate ? { businessName: selectedTemplate.businessName, businessPhone: selectedTemplate.businessPhone, businessEmail: selectedTemplate.businessEmail, businessAddress: selectedTemplate.businessAddress, accentColor: selectedTemplate.accentColor } : null,
+                  template: selectedTemplate ? { businessName: selectedTemplate.businessName, businessPhone: selectedTemplate.businessPhone, businessEmail: selectedTemplate.businessEmail, businessAddress: selectedTemplate.businessAddress, logoUrl: selectedTemplate.logoUrl ?? null, accentColor: selectedTemplate.accentColor } : null,
                 };
                 const res = await fetch('/api/invoices/preview-print', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                 if (!res.ok) throw new Error('Failed to load preview');
@@ -339,7 +340,7 @@ export function InvoiceForm({ invoice }: { invoice?: InvoiceWithRelations }) {
             total={total}
             notes={notes}
             terms={terms}
-            template={selectedTemplate ? { businessName: selectedTemplate.businessName, businessPhone: selectedTemplate.businessPhone, businessEmail: selectedTemplate.businessEmail, businessAddress: selectedTemplate.businessAddress, accentColor: selectedTemplate.accentColor } : null}
+            template={selectedTemplate ? { businessName: selectedTemplate.businessName, businessPhone: selectedTemplate.businessPhone, businessEmail: selectedTemplate.businessEmail, businessAddress: selectedTemplate.businessAddress, logoUrl: selectedTemplate.logoUrl ?? null, accentColor: selectedTemplate.accentColor } : null}
             />
           </div>
         </div>

@@ -9,6 +9,7 @@ const createSchema = z.object({
   businessPhone: z.string().optional(),
   businessEmail: z.string().optional(),
   businessAddress: z.string().optional(),
+  logoUrl: z.string().optional().nullable(),
   accentColor: z.string().optional(),
 });
 
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
         businessPhone: data.businessPhone ?? null,
         businessEmail: data.businessEmail ?? null,
         businessAddress: data.businessAddress ?? null,
+        logoUrl: data.logoUrl ?? null,
         accentColor: data.accentColor ?? '#6367FF',
       },
     });

@@ -36,7 +36,7 @@ export default async function InvoicePrintPage({ params }: { params: Promise<{ i
             total={invoice.total}
             notes={invoice.notes ?? ''}
             terms={invoice.terms ?? ''}
-            template={invoice.template ? { businessName: invoice.template.businessName, businessPhone: invoice.template.businessPhone, businessEmail: invoice.template.businessEmail, businessAddress: invoice.template.businessAddress, accentColor: invoice.template.accentColor } : null}
+            template={invoice.template ? { businessName: invoice.template.businessName, businessPhone: invoice.template.businessPhone, businessEmail: invoice.template.businessEmail, businessAddress: invoice.template.businessAddress, logoUrl: invoice.template.logoUrl ?? null, accentColor: invoice.template.accentColor } : null}
           />
         </div>
       </div>

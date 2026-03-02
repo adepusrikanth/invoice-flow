@@ -73,7 +73,7 @@ export async function extractInvoiceFromText(text: string): Promise<ExtractedInv
 export async function answerInvoiceQuestion(context: string, userMessage: string): Promise<string> {
   const openai = await getOpenAIClient();
   if (!openai) {
-    return 'AI is not configured. Set OPENAI_API_KEY or OPEN_AI_API_KEY in .env (no quotes needed) or in Admin to enable invoice Q&A.';
+    return 'The AI assistant isn’t set up on this deployment. Your local .env.local is not deployed to Vercel. Add OPENAI_API_KEY in Vercel: Project → Settings → Environment Variables (use the same key as in .env.local), save, then redeploy.';
   }
   const res = await openai.chat.completions.create({
     model: 'gpt-4o-mini',

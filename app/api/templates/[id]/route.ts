@@ -9,6 +9,7 @@ const updateSchema = z.object({
   businessPhone: z.string().optional().nullable(),
   businessEmail: z.string().optional().nullable(),
   businessAddress: z.string().optional().nullable(),
+  logoUrl: z.string().optional().nullable(),
   accentColor: z.string().optional(),
 });
 
@@ -36,7 +37,15 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const data = updateSchema.parse(body);
     const updated = await prisma.invoiceTemplate.update({
       where: { id },
-      data: { ...data },
+      data: {
+        ...(data.name != null && { name: data.name }),
+        ...(data.businessName != null && { businessName: data.businessName }),
+        ...(data.businessPhone !== undefined && { businessPhone: data.businessPhone }),
+        ...(data.businessEmail !== undefined && { businessEmail: data.businessEmail }),
+        ...(data.businessAddress !== undefined && { businessAddress: data.businessAddress }),
+        ...(data.logoUrl !== undefined && { logoUrl: data.logoUrl }),
+        ...(data.accentColor != null && { accentColor: data.accentColor }),
+      },
     });
     return NextResponse.json({ template: updated });
   } catch (e) {

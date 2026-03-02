@@ -27,6 +27,7 @@ const bodySchema = z.object({
       businessPhone: z.string().optional().nullable(),
       businessEmail: z.string().optional().nullable(),
       businessAddress: z.string().optional().nullable(),
+      logoUrl: z.string().optional().nullable(),
       accentColor: z.string().optional(),
     })
     .optional()
@@ -74,6 +75,10 @@ export async function POST(req: Request) {
     )
     .join('');
 
+  const logoHtml = d.template?.logoUrl
+    ? `<img src="${d.template.logoUrl.replace(/"/g, '&quot;')}" alt="" style="height: 64px; width: auto; max-width: 160px; object-fit: contain;" />`
+    : '<div style="height: 64px; width: 128px; border: 1px solid #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #999;">Company logo</div>';
+
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,19 +87,22 @@ export async function POST(req: Request) {
   <style>
     body { font-family: system-ui, sans-serif; background: #f5f5f5; margin: 0; padding: 16px; color: #0F0F1A; }
     .invoice { max-width: 21cm; margin: 0 auto; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
-    .header { padding: 24px; color: #fff; }
-    .meta { padding: 16px 24px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: flex-start; }
-    .bill-to { padding: 16px 24px; background: #fafafa; border-bottom: 1px solid #eee; }
+    .top-bar { padding: 16px 24px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: flex-start; }
+    .from-bill { padding: 16px 24px; border-bottom: 1px solid #eee; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; background: #fafafa; }
+    .meta { padding: 16px 24px; border-bottom: 1px solid #eee; }
     table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    th { text-align: left; padding: 12px 24px; border-bottom: 2px solid #eee; color: #444; }
+    th { text-align: left; padding: 12px 24px; border-bottom: 2px solid #eee; background: #f5f5f5; color: #444; }
     th.text-right { text-align: right; }
     th.text-center { text-align: center; }
-    .totals { padding: 16px 24px; background: #fafafa; border-top: 1px solid #eee; }
+    td { padding: 10px 24px; border-bottom: 1px solid #eee; }
+    tr:nth-child(even) td { background: #fafafa; }
+    .totals { padding: 16px 24px; border-top: 1px solid #eee; }
     .totals-inner { max-width: 240px; margin-left: auto; }
     .totals-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 14px; }
-    .totals-total { font-weight: 600; font-size: 16px; padding-top: 8px; margin-top: 8px; border-top: 1px solid #eee; }
+    .totals-total { font-weight: 600; font-size: 16px; padding-top: 8px; margin-top: 8px; border-top: 2px solid #eee; }
     .notes { padding: 16px 24px; border-top: 1px solid #eee; font-size: 13px; color: #444; }
-    .footer { padding: 12px 24px; background: #f0f0f0; text-align: center; font-size: 12px; color: #666; }
+    .thank-you { padding: 16px 24px; border-bottom: 1px solid #eee; text-align: center; }
+    .footer { padding: 12px 24px; background: #f5f5f5; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #666; }
     .no-print { margin-bottom: 16px; padding: 12px 24px; background: #6367FF; color: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; }
     .no-print button { padding: 8px 16px; background: #fff; color: #6367FF; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
     .no-print button:hover { opacity: 0.9; }
@@ -107,28 +115,27 @@ export async function POST(req: Request) {
     <button type="button" onclick="window.print()">Print / Save as PDF</button>
   </div>
   <div class="invoice">
-    <div class="header" style="background: ${accent}">
-      <h1 style="margin:0; font-size: 20px;">${escapeHtml(bizName)}</h1>
-      <div style="font-size: 13px; opacity: 0.9; margin-top: 4px;">
-        ${d.template?.businessAddress ? `<p style="margin:0;">${escapeHtml(d.template.businessAddress)}</p>` : ''}
-        ${(d.template?.businessPhone || d.template?.businessEmail) ? `<p style="margin:4px 0 0;">${escapeHtml([d.template.businessPhone, d.template.businessEmail].filter(Boolean).join(' · '))}</p>` : ''}
-        ${!d.template?.businessAddress && !d.template?.businessPhone && !d.template?.businessEmail ? '<p style="margin:0;">Professional Invoicing</p>' : ''}
-      </div>
-    </div>
-    <div class="meta">
+    <div class="top-bar">
       <div>
-        <p style="margin:0; font-size: 11px; text-transform: uppercase; color: #666;">Invoice</p>
-        <p style="margin: 4px 0 0; font-size: 18px; font-weight: 700;">${escapeHtml(d.invoiceNumber ?? 'INV-0001')}</p>
+        <h1 style="margin:0; font-size: 24px; font-weight: 700;">INVOICE</h1>
+        <p style="margin: 8px 0 0; font-size: 13px; color: #444;">Invoice number: ${escapeHtml(d.invoiceNumber ?? 'INV-0001')}</p>
+        <p style="margin: 4px 0 0; font-size: 13px; color: #444;">Issue date: ${escapeHtml(d.issueDate)}</p>
+        <p style="margin: 4px 0 0; font-size: 13px; color: #444;">Due date: ${escapeHtml(d.dueDate)}</p>
       </div>
-      <div style="text-align: right; font-size: 13px; color: #444;">
-        <p style="margin:0;">Issue: ${escapeHtml(d.issueDate)}</p>
-        <p style="margin: 4px 0 0;">Due: ${escapeHtml(d.dueDate)}</p>
-      </div>
+      <div>${logoHtml}</div>
     </div>
-    <div class="bill-to">
-      <p style="margin:0; font-size: 11px; text-transform: uppercase; color: #666;">Bill to</p>
-      <p style="margin: 4px 0 0; font-weight: 600;">${escapeHtml(d.clientName ?? '—')}</p>
-      ${d.clientEmail ? `<p style="margin: 4px 0 0; font-size: 13px; color: #444;">${escapeHtml(d.clientEmail)}</p>` : ''}
+    <div class="from-bill">
+      <div>
+        <p style="margin:0; font-size: 11px; text-transform: uppercase; color: #666; font-weight: 600;">From</p>
+        <p style="margin: 4px 0 0; font-weight: 600;">${escapeHtml(bizName)}</p>
+        ${d.template?.businessAddress ? `<p style="margin: 4px 0 0; font-size: 13px; color: #444;">${escapeHtml(d.template.businessAddress)}</p>` : ''}
+        ${(d.template?.businessPhone || d.template?.businessEmail) ? `<p style="margin: 4px 0 0; font-size: 13px; color: #444;">${escapeHtml([d.template.businessPhone, d.template.businessEmail].filter(Boolean).join(' · '))}</p>` : ''}
+      </div>
+      <div>
+        <p style="margin:0; font-size: 11px; text-transform: uppercase; color: #666; font-weight: 600;">Bill to</p>
+        <p style="margin: 4px 0 0; font-weight: 600;">${escapeHtml(d.clientName ?? '—')}</p>
+        ${d.clientEmail ? `<p style="margin: 4px 0 0; font-size: 13px; color: #444;">${escapeHtml(d.clientEmail)}</p>` : ''}
+      </div>
     </div>
     <table>
       <thead>
@@ -149,7 +156,8 @@ export async function POST(req: Request) {
       </div>
     </div>
     ${(d.notes || d.terms) ? `<div class="notes">${d.notes ? `<p style="margin:0 0 8px;"><strong>Notes:</strong> ${escapeHtml(d.notes)}</p>` : ''}${d.terms ? `<p style="margin:0;"><strong>Terms:</strong> ${escapeHtml(d.terms)}</p>` : ''}</div>` : ''}
-    <div class="footer">Thank you for your business</div>
+    <div class="thank-you"><p style="margin:0; font-size: 13px; color: #444;">Payment due by: <strong>${escapeHtml(d.dueDate)}</strong></p><p style="margin: 8px 0 0; font-size: 16px; font-style: italic;">Thank you for your business!</p></div>
+    <div class="footer"><span style="font-weight: 600; color: ${accent};">${escapeHtml(bizName)}</span><span>${d.template?.businessAddress ? escapeHtml(d.template.businessAddress) : ''} ${(d.template?.businessPhone || d.template?.businessEmail) ? ' · ' + escapeHtml([d.template.businessPhone, d.template.businessEmail].filter(Boolean).join(' ')) : ''}</span></div>
   </div>
   <script>window.onload = function() { try { window.print(); } catch (e) {} }</script>
 </body>

@@ -58,7 +58,7 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
             total={invoice.total}
             notes={invoice.notes ?? ''}
             terms={invoice.terms ?? ''}
-            template={invoice.template ? { businessName: invoice.template.businessName, businessPhone: invoice.template.businessPhone, businessEmail: invoice.template.businessEmail, businessAddress: invoice.template.businessAddress, accentColor: invoice.template.accentColor } : null}
+            template={invoice.template ? { businessName: invoice.template.businessName, businessPhone: invoice.template.businessPhone, businessEmail: invoice.template.businessEmail, businessAddress: invoice.template.businessAddress, logoUrl: invoice.template.logoUrl ?? null, accentColor: invoice.template.accentColor } : null}
           />
         </div>
         <div className="space-y-4">

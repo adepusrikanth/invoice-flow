@@ -10,6 +10,7 @@ type Template = {
   businessPhone: string | null;
   businessEmail: string | null;
   businessAddress: string | null;
+  logoUrl: string | null;
   accentColor: string;
 };
 
@@ -22,8 +23,25 @@ export function TemplateForm({ template }: { template?: Template }) {
   const [businessPhone, setBusinessPhone] = useState(template?.businessPhone ?? '');
   const [businessEmail, setBusinessEmail] = useState(template?.businessEmail ?? '');
   const [businessAddress, setBusinessAddress] = useState(template?.businessAddress ?? '');
+  const [logoUrl, setLogoUrl] = useState(template?.logoUrl ?? '');
   const [accentColor, setAccentColor] = useState(template?.accentColor ?? '#6367FF');
   const [saving, setSaving] = useState(false);
+
+  function handleLogoFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result as string;
+      if (dataUrl.length > 500000) {
+        alert('Image too large. Use a smaller image (under ~200KB).');
+        return;
+      }
+      setLogoUrl(dataUrl);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -40,6 +58,7 @@ export function TemplateForm({ template }: { template?: Template }) {
           businessPhone: businessPhone || null,
           businessEmail: businessEmail || null,
           businessAddress: businessAddress || null,
+          logoUrl: logoUrl || null,
           accentColor,
         }),
       });
@@ -71,6 +90,25 @@ export function TemplateForm({ template }: { template?: Template }) {
       <div className="border-t border-neutral-200 pt-6">
         <h3 className="font-medium text-neutral-900 mb-3">Business details (printed on invoice header)</h3>
         <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Company logo</label>
+            <p className="text-xs text-neutral-500 mb-2">Shown on the top-right of your invoice. Use a square or horizontal image (under ~200KB).</p>
+            <div className="flex items-start gap-4">
+              {logoUrl ? (
+                <div className="flex items-center gap-3">
+                  <img src={logoUrl} alt="Logo preview" className="h-16 w-auto max-w-[120px] object-contain border border-neutral-200 rounded" />
+                  <button type="button" onClick={() => setLogoUrl('')} className="text-sm text-neutral-500 hover:text-error-dark">Remove logo</button>
+                </div>
+              ) : null}
+              <label className="cursor-pointer">
+                <span className="inline-block px-3 py-2 rounded-button bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-sm font-medium">{logoUrl ? 'Change logo' : 'Upload logo'}</span>
+                <input type="file" accept="image/*" onChange={handleLogoFile} className="sr-only" />
+              </label>
+            </div>
+            <div className="mt-2">
+              <input type="url" value={typeof logoUrl === 'string' && logoUrl.startsWith('http') ? logoUrl : ''} onChange={(e) => setLogoUrl(e.target.value)} placeholder="Or paste logo image URL" className="w-full px-3 py-2 rounded-input border border-neutral-300 text-sm text-neutral-900 placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-brand-primary/30" />
+            </div>
+          </div>
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">Business name *</label>
             <input type="text" value={businessName} onChange={(e) => setBusinessName(e.target.value)} required className="w-full px-3 py-2.5 rounded-input border border-neutral-300 bg-white text-neutral-900 placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-brand-primary/30" placeholder="Your business name" />

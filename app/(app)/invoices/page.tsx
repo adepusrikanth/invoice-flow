@@ -8,11 +8,21 @@ export const dynamic = 'force-dynamic';
 export default async function InvoicesPage() {
   const session = await getSession();
   if (!session) return null;
-  const invoices = await prisma.invoice.findMany({
-    where: { userId: session.id },
-    orderBy: { createdAt: 'desc' },
-    include: { client: true },
-  });
+
+  let invoices: Awaited<ReturnType<typeof prisma.invoice.findMany<{ include: { client: true } }>>> = [];
+  let loadError = false;
+  try {
+    invoices = await prisma.invoice.findMany({
+      where: { userId: session.id },
+      orderBy: { createdAt: 'desc' },
+      include: { client: true },
+    });
+  } catch (e) {
+    console.error('Invoices page error:', e);
+    loadError = true;
+  }
+
+  const safeTotal = (inv: { total?: number | null }) => (inv.total != null ? Number(inv.total) : 0);
 
   return (
     <div className="space-y-6">
@@ -22,6 +32,11 @@ export default async function InvoicesPage() {
           <Plus className="w-4 h-4" /> New Invoice
         </Link>
       </div>
+      {loadError && (
+        <div className="rounded-card bg-error-bg border border-error-dark/20 p-4 text-error-dark text-sm">
+          Unable to load invoices. Check your database connection and try again.
+        </div>
+      )}
       <div className="rounded-card bg-white border border-neutral-200 shadow-sm overflow-hidden">
         {/* Mobile: card list */}
         <div className="md:hidden divide-y divide-neutral-100">
@@ -36,7 +51,7 @@ export default async function InvoicesPage() {
                 }`}>{inv.status}</span>
               </div>
               <p className="text-sm text-neutral-600 mt-1">{inv.client?.name ?? '—'}</p>
-              <p className="text-sm font-mono text-neutral-900 mt-1">{inv.currency} {inv.total.toFixed(2)}</p>
+              <p className="text-sm font-mono text-neutral-900 mt-1">{inv.currency} {safeTotal(inv).toFixed(2)}</p>
               <p className="text-xs text-neutral-500 mt-1">{inv.issueDate} → {inv.dueDate}</p>
               <div className="flex gap-3 mt-3">
                 <span className="text-brand-primary text-sm font-medium">View</span>
@@ -64,7 +79,7 @@ export default async function InvoicesPage() {
                 <tr key={inv.id} className="border-b border-neutral-100 hover:bg-neutral-50">
                   <td className="p-3 font-mono text-neutral-900">{inv.invoiceNumber}</td>
                   <td className="p-3 text-neutral-600">{inv.client?.name ?? '—'}</td>
-                  <td className="p-3 text-right font-mono text-neutral-900">{inv.currency} {inv.total.toFixed(2)}</td>
+                  <td className="p-3 text-right font-mono text-neutral-900">{inv.currency} {safeTotal(inv).toFixed(2)}</td>
                   <td className="p-3">
                     <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
                       inv.status === 'paid' ? 'bg-success-bg text-success-dark' :

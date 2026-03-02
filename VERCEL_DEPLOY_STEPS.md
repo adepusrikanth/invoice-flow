@@ -28,7 +28,7 @@ Click **Environment Variables** and add (at least for a working app):
 |------------------|--------------------------|--------------------------------|
 | `DATABASE_URL`   | Your database URL        | See note below                 |
 | `JWT_SECRET`     | Long random string (32+) | For session signing            |
-| `OPENAI_API_KEY`| Your OpenAI key          | Only if you use AI features   |
+| `OPENAI_API_KEY`| Your OpenAI API key      | **Required for AI assistant.** Your `.env.local` is not deployed — add the same key here. |
 
 **Database (required for signup/login):** The app uses **PostgreSQL**. You must set `DATABASE_URL` to a Postgres connection string:
 
@@ -36,7 +36,7 @@ Click **Environment Variables** and add (at least for a working app):
 - **Neon (free):** [neon.tech](https://neon.tech) → Create project → copy the connection string → set as `DATABASE_URL`.
 - **Supabase (free):** [supabase.com](https://supabase.com) → New project → Settings → Database → Connection string (URI) → set as `DATABASE_URL`.
 
-The first deploy will run `prisma db push` during build to create tables. **Signup and login will work only after `DATABASE_URL` and `JWT_SECRET` are set.**
+The first deploy will run `prisma db push` during build to create tables. **Signup and login** need `DATABASE_URL` and `JWT_SECRET`. **AI assistant (chat)** needs `OPENAI_API_KEY` — add it in Vercel (same value as in your local `.env.local`), then redeploy.
 
 ### 4. Deploy
 

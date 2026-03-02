@@ -14,12 +14,14 @@ import {
   Settings,
   HelpCircle,
   FileStack,
+  Eye,
 } from 'lucide-react';
 import { clsx } from 'clsx';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/invoices', label: 'Invoices', icon: FileText },
+  { href: '/invoices', label: 'View', icon: Eye },
   { href: '/clients', label: 'Clients', icon: Users },
   { href: '/payments', label: 'Payments', icon: CreditCard },
   { href: '/reports', label: 'Reports', icon: BarChart3 },

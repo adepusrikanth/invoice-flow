@@ -49,9 +49,11 @@ export async function POST(req: Request) {
     const relevant = filterRelevantInvoices(invoices, message, 50);
     const context = buildInvoiceContext(relevant);
     const answer = await answerInvoiceQuestion(context, message);
+    const needsKey = answer.includes("isn't set up yet") || answer.includes('OPENAI_API_KEY');
     return NextResponse.json({
       answer,
       suggestions: ['What is total revenue?', 'Outstanding amount?', 'Revenue by client?'],
+      ...(needsKey && { needsOpenAIKey: true }),
     });
   } catch (e) {
     console.error('Chat API error:', e);
